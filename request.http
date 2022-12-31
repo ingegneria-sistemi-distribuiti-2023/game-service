@@ -11,3 +11,6 @@ content-type: application/json
 
 ###
 GET http://localhost:8080/dummy1 HTTP/1.1
+
+###
+GET http://localhost:8080/dummyall HTTP/1.1
