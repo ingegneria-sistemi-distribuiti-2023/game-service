@@ -1,0 +1,13 @@
+
+###
+POST http://localhost:8080/dummy2 HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Marco",
+    "surname": "Polo"
+}
+
+
+###
+GET http://localhost:8080/dummy1 HTTP/1.1

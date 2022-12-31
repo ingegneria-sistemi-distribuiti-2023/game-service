@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.Dummy2Dto;
+
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Optional;
 
 /*
  * @RestController is a convenience annotation that does nothing more than adding the @Controller and @ResponseBody annotations
@@ -29,8 +31,8 @@ public class DemoController {
 	}
 	
 	// dummy2: take a get some parameters and return them as a string
-	@RequestMapping(path = "/dummy2", method = RequestMethod.GET)
-	public String dummy2(@RequestParam String name, @RequestParam Optional<String> surname) {
-		return name + " " + surname.orElse("surname not provided -- ");
+	@RequestMapping(path = "/dummy2", method = RequestMethod.POST)
+	public String dummy2(@RequestBody Dummy2Dto dummy2dto) {
+		return dummy2dto.getName() + " " + dummy2dto.getSurname();
 	}
 }
