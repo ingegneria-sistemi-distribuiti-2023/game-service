@@ -12,5 +12,22 @@ content-type: application/json
 ###
 GET http://localhost:8080/dummy1 HTTP/1.1
 
+
 ###
-GET http://localhost:8080/dummyall HTTP/1.1
+GET http://localhost:8080/match/all HTTP/1.1
+
+###
+POST http://localhost:8080/match/id HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1
+}
+
+###
+GET http://localhost:8080/team/1 HTTP/1.1
+content-type: application/json
+
+
+###
+GET http://localhost:8080/team/all HTTP/1.1
