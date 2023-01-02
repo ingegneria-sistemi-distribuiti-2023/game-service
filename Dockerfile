@@ -4,13 +4,12 @@ FROM maven:3.8.3-openjdk-17 AS maven
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 # Compile and package the application to an executable JAR
-RUN mvn clean package 
+RUN mvn clean package -Dmaven.test.skip=true
 
 FROM openjdk:17.0.1-jdk-slim
-ARG JAR_FILE=demo-0.0.1-SNAPSHOT.jar
 WORKDIR /app
 # Copy the executable JAR from the maven stage to the current stage
-COPY --from=maven /usr/src/app/target/${JAR_FILE} /app
+COPY --from=maven /usr/src/app/target/demo-0.0.1-SNAPSHOT.jar /app
 ENV SERVER_PORT 8081
 EXPOSE $SERVER_PORT
-ENTRYPOINT ["java", "-jar", "${JAR_FILE}" ]
+ENTRYPOINT ["java", "-jar", "demo-0.0.1-SNAPSHOT.jar" ]

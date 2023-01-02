@@ -11,6 +11,9 @@ services:
     expose:
       # Opens port 3306 on the container
       - '3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: match_pool
     healthcheck:
       test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
       start_period: 5s
@@ -19,14 +22,13 @@ services:
       retries: 55
 
 
-  authentication_service:
+  game_service:
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
       match_db:
         condition: service_healthy
-    image: authentication-service:latest
     restart: always
     ports:
       - 8081:8081
