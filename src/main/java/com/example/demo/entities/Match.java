@@ -2,8 +2,12 @@ package com.example.demo.entities;
 
 import java.util.Date;
 
+import com.example.demo.commons.MatchStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,12 +47,13 @@ public class Match {
 
     // status of the match
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private MatchStatus status;
 
     public Match() {
     }
 
-    public Match(Integer homeTeamId, Integer awayTeamId, Integer homeTeamScore, Integer awayTeamScore, Date startTime, Date endTime, String status) {
+    public Match(Integer homeTeamId, Integer awayTeamId, Integer homeTeamScore, Integer awayTeamScore, Date startTime, Date endTime, MatchStatus status) {
         this.homeTeamId = homeTeamId;
         this.awayTeamId = awayTeamId;
         this.homeTeamScore = homeTeamScore;
@@ -114,11 +119,11 @@ public class Match {
         this.endTime = endTime;
     }
 
-    public String getStatus() {
+    public MatchStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(MatchStatus status) {
         this.status = status;
     }
 

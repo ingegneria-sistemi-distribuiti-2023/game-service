@@ -7,6 +7,7 @@ import com.example.demo.mapper.TeamMapperService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Controller is a specialization of Component that allows for implementation classes to be autodetected through classpath scanning
  */
 @RestController()// @Controller + @ResponseBody
+@RequestMapping("/team")
 public class TeamController {
 
 
@@ -43,14 +45,20 @@ public class TeamController {
 	
 
 	// return all the teams
-	@RequestMapping(path = "/team/all", method = RequestMethod.GET)
+	@RequestMapping(path = "/all", method = RequestMethod.GET)
 	public @ResponseBody Iterable<TeamDto> teams() {
 		return teamMapperService.getAllData();
 	}
 
 	// return a team by id
-	@RequestMapping(path = "/team/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody TeamDto team(@PathVariable("id") int id) {
 		return teamMapperService.findTeam(id);
+	}
+
+	// create a new team given a name
+	@RequestMapping(path = "/create", method = RequestMethod.POST)
+	public @ResponseBody TeamDto create(@RequestBody TeamDto teamDto) {
+		return teamMapperService.createNewRecord(teamDto);
 	}
 }

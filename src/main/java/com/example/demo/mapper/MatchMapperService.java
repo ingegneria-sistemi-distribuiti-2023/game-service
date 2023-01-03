@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.dto.MatchDto;
 import com.example.demo.entities.Match;
 import com.example.demo.repository.MatchRepository;
+import com.example.demo.repository.TeamRepository;
 
 
 /**
@@ -33,6 +34,9 @@ public class MatchMapperService {
     @Autowired
     private MatchRepository matchRepository;
 
+    @Autowired
+    private TeamRepository teamRepository;
+
     // get all the data from the database
     public List<MatchDto> getAllData() {
         return matchRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
@@ -40,15 +44,17 @@ public class MatchMapperService {
 
     // convert the data from the database to a DTO
     public MatchDto convertToDto(Match match) {
-        System.out.println(match.toString());
         MatchDto matchDto = new MatchDto();
         matchDto.setId(match.getId());
         matchDto.setHomeTeamId(match.getHomeTeamId());
         matchDto.setAwayTeamId(match.getAwayTeamId());
+        matchDto.setHomeTeamName(teamRepository.findById(match.getHomeTeamId()).get().getName());
+        matchDto.setAwayTeamName(teamRepository.findById(match.getAwayTeamId()).get().getName());
         matchDto.setHomeTeamScore(match.getHomeTeamScore());
         matchDto.setAwayTeamScore(match.getAwayTeamScore());
         matchDto.setStartTime(match.getStartTime());
         matchDto.setEndTime(match.getEndTime());
+        matchDto.setStatus(match.getStatus());
         return matchDto;
     }
 
@@ -61,6 +67,7 @@ public class MatchMapperService {
         match.setAwayTeamScore(matchDto.getAwayTeamScore());
         match.setStartTime(matchDto.getStartTime());
         match.setEndTime(matchDto.getEndTime());
+        match.setStatus(matchDto.getStatus());
         matchRepository.save(match);
         return convertToDto(match);
     }
@@ -74,6 +81,7 @@ public class MatchMapperService {
         match.setAwayTeamScore(matchDto.getAwayTeamScore());
         match.setStartTime(matchDto.getStartTime());
         match.setEndTime(matchDto.getEndTime());
+        match.setStatus(matchDto.getStatus());
         matchRepository.save(match);
         return convertToDto(match);
     }

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Controller is a specialization of Component that allows for implementation classes to be autodetected through classpath scanning
  */
 @RestController()// @Controller + @ResponseBody
+@RequestMapping("/match")
 public class MatchController {
 
 	@Autowired
@@ -41,13 +42,13 @@ public class MatchController {
 	}
 
 	// return all the matches
-	@RequestMapping(path = "/match/all", method = RequestMethod.GET)
+	@RequestMapping(path = "/all", method = RequestMethod.GET)
 	public @ResponseBody Iterable<MatchDto> all() {
 		return matchMapperService.getAllData();
 	}
 
 	// return a match by id
-	@RequestMapping(path = "/match/id", method = RequestMethod.POST)
+	@RequestMapping(path = "/id", method = RequestMethod.POST)
 	public @ResponseBody MatchDto id(@RequestBody MatchDto matchDto) {
 		return matchMapperService.findMatch(matchDto.getId());
 	}
