@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.isd.game.entities.Team;
+import com.isd.game.domain.Team;
 /*
  * jpa repository is a Spring Data JPA interface that provides CRUD operations
  * for the entity class that is being managed.

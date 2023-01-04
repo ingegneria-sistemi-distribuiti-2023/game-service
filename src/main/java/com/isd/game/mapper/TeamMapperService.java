@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.isd.game.domain.Team;
 import com.isd.game.dto.TeamDto;
-import com.isd.game.entities.Team;
 import com.isd.game.repository.TeamRepository;
 
 

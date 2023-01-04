@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.isd.game.domain.MatchHistory;
 import com.isd.game.dto.MatchDto;
 import com.isd.game.dto.MatchHistoryDto;
-import com.isd.game.entities.MatchHistory;
 import com.isd.game.repository.MatchHistoryRepository;
 import com.isd.game.repository.TeamRepository;
 

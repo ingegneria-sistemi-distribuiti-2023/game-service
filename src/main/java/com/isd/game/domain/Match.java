@@ -1,4 +1,4 @@
-package com.isd.game.entities;
+package com.isd.game.domain;
 
 import java.util.Date;
 
