@@ -18,8 +18,8 @@ import jakarta.persistence.Table;
  * it is a Java representation of a database table
  */
 @Entity
-@Table(name = "match_info")
-public class Match {
+@Table(name = "match_history")
+public class MatchHistory {
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false, insertable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment in MySQL
@@ -37,9 +37,6 @@ public class Match {
     @Column(name = "away_score")
     private Integer awayTeamScore;
 
-    @Column(name = "in_game_minute")
-    private Integer inGameMinute;
-
     // start time of the match
     @Column(name = "start_time")
     private Date startTime;
@@ -53,15 +50,14 @@ public class Match {
     @Enumerated(EnumType.STRING)
     private MatchStatus status;
 
-    public Match() {
+    public MatchHistory() {
     }
 
-    public Match(Integer homeTeamId, Integer awayTeamId, Integer homeTeamScore, Integer awayTeamScore, Integer inGameMinute, Date startTime, Date endTime, MatchStatus status) {
+    public MatchHistory(Integer homeTeamId, Integer awayTeamId, Integer homeTeamScore, Integer awayTeamScore, Date startTime, Date endTime, MatchStatus status) {
         this.homeTeamId = homeTeamId;
         this.awayTeamId = awayTeamId;
         this.homeTeamScore = homeTeamScore;
         this.awayTeamScore = awayTeamScore;
-        this.inGameMinute = inGameMinute;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
@@ -107,14 +103,6 @@ public class Match {
         this.awayTeamScore = awayTeamScore;
     }
 
-    public Integer getInGameMinute() {
-        return inGameMinute;
-    }
-
-    public void setInGameMinute(Integer inGameMinute) {
-        this.inGameMinute = inGameMinute;
-    }
-
     public Date getStartTime() {
         return startTime;
     }
@@ -141,8 +129,8 @@ public class Match {
 
     @Override
     public String toString() {
-        return "Match [awayTeamId=" + awayTeamId + ", awayTeamScore=" + awayTeamScore + ", endTime=" + endTime +
-         ", homeTeamId=" + homeTeamId + ", homeTeamScore=" + homeTeamScore + ", id=" + id + ", inGameMinute=" +
-          inGameMinute + ", startTime=" + startTime + ", status=" + status + "]";
+        return "Match [awayTeamId=" + awayTeamId + ", awayTeamScore=" + awayTeamScore + ", endTime=" + endTime
+                + ", homeTeamId=" + homeTeamId + ", homeTeamScore=" + homeTeamScore + ", id=" + id + ", startTime="
+                + startTime + ", status=" + status +"]";
     }
 }

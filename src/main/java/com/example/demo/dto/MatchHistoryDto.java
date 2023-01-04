@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.example.demo.commons.MatchStatus;
 
-public class MatchDto {
+public class MatchHistoryDto {
     // this DTO contains the match ID, IDs of the teams, the home and away scores, the start time and the end time of the match
     private int id;
     private int homeTeamId;
@@ -13,15 +13,14 @@ public class MatchDto {
     private String awayTeamName;
     private int homeTeamScore;
     private int awayTeamScore;
-    private int inGameMinute;
     private Date startTime;
     private Date endTime;
     private MatchStatus status;
 
-    public MatchDto() {
+    public MatchHistoryDto() {
     }
 
-    public MatchDto( int id, int homeTeamId, int awayTeamId, String homeTeamName, String awayTeamName,int homeTeamScore, int inGameMinute, int awayTeamScore, Date startTime, Date endTime, MatchStatus status) {
+    public MatchHistoryDto( int id, int homeTeamId, int awayTeamId, String homeTeamName, String awayTeamName,int homeTeamScore, int awayTeamScore, Date startTime, Date endTime, MatchStatus status) {
         this.id = id;
         this.homeTeamId = homeTeamId;
         this.awayTeamId = awayTeamId;
@@ -29,7 +28,6 @@ public class MatchDto {
         this.awayTeamName = awayTeamName;
         this.homeTeamScore = homeTeamScore;
         this.awayTeamScore = awayTeamScore;
-        this.inGameMinute = inGameMinute;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
@@ -91,14 +89,6 @@ public class MatchDto {
         this.awayTeamScore = awayTeamScore;
     }
 
-    public int getInGameMinute() {
-        return inGameMinute;
-    }
-
-    public void setInGameMinute(int inGameMinute) {
-        this.inGameMinute = inGameMinute;
-    }
-
     public Date getStartTime() {
         return startTime;
     }
@@ -125,8 +115,6 @@ public class MatchDto {
 
     @Override
     public String toString() {
-        return "MatchDto [awayTeamId=" + awayTeamId + ", awayTeamName=" + awayTeamName + ", awayTeamScore=" + awayTeamScore +
-         ", endTime=" + endTime + ", homeTeamId=" + homeTeamId + ", homeTeamName=" + homeTeamName + ", homeTeamScore=" +
-          homeTeamScore + ", id=" + id + ", inGameMinute=" + inGameMinute + ", startTime=" + startTime + ", status=" + status + "]";
+        return "MatchHistoryDto [id=" + id + ", homeTeamId=" + homeTeamId + ", awayTeamId=" + awayTeamId + ", homeTeamName=" + homeTeamName + ", awayTeamName=" + awayTeamName + ", homeTeamScore=" + homeTeamScore + ", awayTeamScore=" + awayTeamScore + ", startTime=" + startTime + ", endTime=" + endTime + ", status=" + status + "]";
     }
 }

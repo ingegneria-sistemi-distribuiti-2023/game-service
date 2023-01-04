@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.commons.MatchStatus;
 import com.example.demo.dto.MatchDto;
 import com.example.demo.dto.TeamDto;
+import com.example.demo.mapper.MatchHistoryMapperService;
 import com.example.demo.mapper.MatchMapperService;
 import com.example.demo.mapper.TeamMapperService;
 
@@ -34,6 +35,9 @@ public class matchSchedulerService {
     @Autowired
     private TeamMapperService teamMapperService;
 
+    @Autowired
+    private MatchHistoryMapperService matchHistoryMapperService;
+
     /**
      * every 10 seconds, fetch two teams that are not in a match that ended and create a new match between them.
      */
@@ -44,38 +48,39 @@ public class matchSchedulerService {
         // fetch all matches from database
         List<MatchDto> matches = matchMapperService.getAllData();
         // find two teams that are not in a match that ended
-        TeamDto team1 = null;
-        TeamDto team2 = null;
+        TeamDto homeTeam = null;
+        TeamDto awayTeam = null;
         // shuffle the teams and matches
         java.util.Collections.shuffle(teams);
         java.util.Collections.shuffle(matches);
         for (TeamDto team : teams) {
-            boolean found = false;
+            boolean teamInMatch = false;
             for (MatchDto match : matches) {
-                if (match.getHomeTeamId() == team.getId() || match.getAwayTeamId() == team.getId()) {
-                    found = true;
+                if ((match.getHomeTeamId() == team.getId() || match.getAwayTeamId() == team.getId()) && !match.getStatus().equals(MatchStatus.FINISHED)) {
+                    teamInMatch = true;
                     break;
                 }
             }
-            if (!found) {
-                if (team1 == null) {
-                    team1 = team;
+            if (!teamInMatch) {
+                if (homeTeam == null) {
+                    homeTeam = team;
                 } else {
-                    team2 = team;
+                    awayTeam = team;
                     break;
                 }
             }
         }
-        // if we found two teams, create a new match between them that will start in 2 minutes
-        if (team1 != null && team2 != null) {
+        // if we found two teams, create a new match between them that will start in 2 to 5 minutes
+        if (homeTeam != null && awayTeam != null) {
             MatchDto match = new MatchDto();
-            match.setHomeTeamId(team1.getId());
-            match.setAwayTeamId(team2.getId());
-            match.setStartTime(new Date(new Date().getTime() + TimeUnit.MINUTES.toMillis(2)));
+            match.setHomeTeamId(homeTeam.getId());
+            match.setAwayTeamId(awayTeam.getId());
+            match.setStartTime(new Date(new Date().getTime() + TimeUnit.MINUTES.toMillis(2 + (int) (Math.random() * 3)) ));
             match.setEndTime(null);
             match.setHomeTeamScore(0);
             match.setAwayTeamScore(0);
             match.setStatus(MatchStatus.TO_BE_PLAYED);
+            match.setInGameMinute(0);
             matchMapperService.createNewMatch(match);
         }
     }
@@ -91,16 +96,23 @@ public class matchSchedulerService {
         // update the score of each match
         matches.forEach(match -> {
             // if the match started more than 10 minutes ago, do not update the score
-            long matchStartTimeStamp = match.getStartTime().getTime();
-            long currentTimestamp = new Date().getTime();
-            if ((Math.abs(currentTimestamp - matchStartTimeStamp) >= TimeUnit.MINUTES.toMillis(10)) && !(match.getStatus().equals(MatchStatus.FINISHED))) {
+            Date matchStartTime = match.getStartTime();
+            Date currentTime = new Date();
+            if ((Math.abs(currentTime.getTime() - matchStartTime.getTime()) >= TimeUnit.MINUTES.toMillis(10)) && !(match.getStatus().equals(MatchStatus.FINISHED))) {
                 // update the end time of the match
-                match.setEndTime(new Date(matchStartTimeStamp + TimeUnit.MINUTES.toMillis(10)));
+                match.setEndTime(new Date(matchStartTime.getTime() + TimeUnit.MINUTES.toMillis(10)));
                 // update the status of the match
                 match.setStatus(MatchStatus.FINISHED);
-            } else if (((Math.abs(matchStartTimeStamp - currentTimestamp) >= TimeUnit.SECONDS.toMillis(0)))) { // TODO: check this condition
+
+                // add the match to the history
+                matchHistoryMapperService.createNewMatch(match);
+
+                // delete the match from the current matches
+                matchMapperService.deleteMatch(match.getId());
+
+            } else if (((matchStartTime.compareTo(currentTime) <= 0)) && !(match.getStatus().equals(MatchStatus.FINISHED))) {
                 // generate a random number between 0 and 1
-                int random = (int) (Math.random() * 3);
+                int random = (int) (Math.random() * 10);
                 // if the random number is 0, add a goal to the home team
                 switch (random) {
                     case 0:
@@ -109,19 +121,24 @@ public class matchSchedulerService {
                     case 1:
                         match.setAwayTeamScore(match.getAwayTeamScore() + 1);
                         break;
-                    case 2:
+                    default:
                         // no goal added
                         break;
-                    default:
-                        break;
                 }
-               match.setStatus(MatchStatus.PLAYING);
+                match.setStatus(MatchStatus.PLAYING);
+
+                // update inGameMinute, map the real time elapsed to the start of the match in a range of 0 to 90 minutes in game where 0 is the start of the match and 90 is the start time plus 10 minutes
+                long matchStartTimeStamp = match.getStartTime().getTime();
+                long matchEndTimeStamp = new Date().getTime();
+                long matchDuration = Math.abs(matchStartTimeStamp - matchEndTimeStamp);
+                long matchDurationInSeconds = TimeUnit.MILLISECONDS.toSeconds(matchDuration);
+                match.setInGameMinute((int) (matchDurationInSeconds * (90 ) / (10 * 60)));
+                // TODO: delete this
+                System.out.println("match updated");
+                System.out.println(match);
+                // save the match to the database
+                matchMapperService.updateMatch(match);
             }
-            // TODO: delete this
-            System.out.println("match updated");
-            System.out.println(match);
-            // save the match to the database
-            matchMapperService.updateMatch(match);
         });
     }
     

@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.MatchDto;
-import com.example.demo.entities.Match;
-import com.example.demo.repository.MatchRepository;
+import com.example.demo.dto.MatchHistoryDto;
+import com.example.demo.entities.MatchHistory;
+import com.example.demo.repository.MatchHistoryRepository;
 import com.example.demo.repository.TeamRepository;
 
 
@@ -29,22 +30,22 @@ import com.example.demo.repository.TeamRepository;
  */
 @Service
 @Transactional
-public class MatchMapperService {
+public class MatchHistoryMapperService {
     // @Autowired annotation is used to inject the object dependency implicitly.
     @Autowired
-    private MatchRepository matchRepository;
+    private MatchHistoryRepository matchHistoryRepository;
 
     @Autowired
     private TeamRepository teamRepository;
 
     // get all the data from the database
-    public List<MatchDto> getAllData() {
-        return matchRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+    public List<MatchHistoryDto> getAllData() {
+        return matchHistoryRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     // convert the data from the database to a DTO
-    public MatchDto convertToDto(Match match) {
-        MatchDto matchDto = new MatchDto();
+    public MatchHistoryDto convertToDto(MatchHistory match) {
+        MatchHistoryDto matchDto = new MatchHistoryDto();
         matchDto.setId(match.getId());
         matchDto.setHomeTeamId(match.getHomeTeamId());
         matchDto.setAwayTeamId(match.getAwayTeamId());
@@ -52,58 +53,70 @@ public class MatchMapperService {
         matchDto.setAwayTeamName(teamRepository.findById(match.getAwayTeamId()).get().getName());
         matchDto.setHomeTeamScore(match.getHomeTeamScore());
         matchDto.setAwayTeamScore(match.getAwayTeamScore());
-        matchDto.setInGameMinute(match.getInGameMinute());
         matchDto.setStartTime(match.getStartTime());
         matchDto.setEndTime(match.getEndTime());
         matchDto.setStatus(match.getStatus());
         return matchDto;
     }
 
+    public MatchHistoryDto createNewMatch(MatchDto matchDto) {
+        // create a MatchHistoryDto object from the MatchDto one
+        MatchHistoryDto matchHistoryDto = new MatchHistoryDto();
+        matchHistoryDto.setHomeTeamId(matchDto.getHomeTeamId());
+        matchHistoryDto.setAwayTeamId(matchDto.getAwayTeamId());
+        matchHistoryDto.setHomeTeamScore(matchDto.getHomeTeamScore());
+        matchHistoryDto.setAwayTeamScore(matchDto.getAwayTeamScore());
+        matchHistoryDto.setStartTime(matchDto.getStartTime());
+        matchHistoryDto.setEndTime(matchDto.getEndTime());
+        matchHistoryDto.setStatus(matchDto.getStatus());
+        // create a new record in the database
+        return createNewMatch(matchHistoryDto);
+    }
+
+
     // create a new record in the database
-    public MatchDto createNewMatch(MatchDto matchDto) {
-        Match match = new Match();
+    public MatchHistoryDto createNewMatch(MatchHistoryDto matchDto) {
+        MatchHistory match = new MatchHistory();
         match.setHomeTeamId(matchDto.getHomeTeamId());
         match.setAwayTeamId(matchDto.getAwayTeamId());
         match.setHomeTeamScore(matchDto.getHomeTeamScore());
         match.setAwayTeamScore(matchDto.getAwayTeamScore());
-        match.setInGameMinute(matchDto.getInGameMinute());
         match.setStartTime(matchDto.getStartTime());
         match.setEndTime(matchDto.getEndTime());
         match.setStatus(matchDto.getStatus());
-        matchRepository.save(match);
+        matchHistoryRepository.save(match);
         return convertToDto(match);
     }
 
     // update a record in the database
-    public MatchDto updateMatch(MatchDto matchDto) {
-        Match match = matchRepository.findById(matchDto.getId()).get();
+    public MatchHistoryDto updateMatch(MatchHistoryDto matchDto) {
+        MatchHistory match = matchHistoryRepository.findById(matchDto.getId()).get();
         match.setHomeTeamId(matchDto.getHomeTeamId());
         match.setAwayTeamId(matchDto.getAwayTeamId());
         match.setHomeTeamScore(matchDto.getHomeTeamScore());
         match.setAwayTeamScore(matchDto.getAwayTeamScore());
-        match.setInGameMinute(matchDto.getInGameMinute());
         match.setStartTime(matchDto.getStartTime());
         match.setEndTime(matchDto.getEndTime());
         match.setStatus(matchDto.getStatus());
-        matchRepository.save(match);
+        matchHistoryRepository.save(match);
         return convertToDto(match);
     }
 
     // delete a record from the database
     public void deleteMatch(Integer id) {
         //check if the match exists
-        if (!matchRepository.existsById(id)) {
+        if (!matchHistoryRepository.existsById(id)) {
             throw new RuntimeException("Match with id " + id + " does not exist");
         }
-        matchRepository.deleteById(id);
+        matchHistoryRepository.deleteById(id);
     }
 
     // find a record in the database
-    public MatchDto findMatch(Integer id) {
+    public MatchHistoryDto findMatch(Integer id) {
         //check if the match exists
-        if (!matchRepository.existsById(id)) {
+        if (!matchHistoryRepository.existsById(id)) {
             throw new RuntimeException("Match with id " + id + " does not exist");
         }
-        return convertToDto(matchRepository.findById(id).get());
+        return convertToDto(matchHistoryRepository.findById(id).get());
     }
 }
