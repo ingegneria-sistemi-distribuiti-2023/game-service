@@ -129,4 +129,51 @@ public class MatchDto {
          ", endTime=" + endTime + ", homeTeamId=" + homeTeamId + ", homeTeamName=" + homeTeamName + ", homeTeamScore=" +
           homeTeamScore + ", id=" + id + ", inGameMinute=" + inGameMinute + ", startTime=" + startTime + ", status=" + status + "]";
     }
+
+    // override the equals method to compare two MatchDto objects
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        MatchDto other = (MatchDto) obj;
+        if (awayTeamId != other.awayTeamId)
+            return false;
+        if (awayTeamName == null) {
+            if (other.awayTeamName != null)
+                return false;
+        } else if (!awayTeamName.equals(other.awayTeamName))
+            return false;
+        if (awayTeamScore != other.awayTeamScore)
+            return false;
+        if (endTime == null) {
+            if (other.endTime != null)
+                return false;
+        } else if (!endTime.equals(other.endTime))
+            return false;
+        if (homeTeamId != other.homeTeamId)
+            return false;
+        if (homeTeamName == null) {
+            if (other.homeTeamName != null)
+                return false;
+        } else if (!homeTeamName.equals(other.homeTeamName))
+            return false;
+        if (homeTeamScore != other.homeTeamScore)
+            return false;
+        if (id != other.id)
+            return false;
+        if (inGameMinute != other.inGameMinute)
+            return false;
+        if (startTime == null) {
+            if (other.startTime != null)
+                return false;
+        } else if (!startTime.equals(other.startTime))
+            return false;
+        if (status != other.status)
+            return false;
+        return true;
+    }
 }

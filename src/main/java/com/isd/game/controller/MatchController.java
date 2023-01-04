@@ -36,7 +36,7 @@ public class MatchController {
 	private MatchMapperService matchMapperService;
 
 	// default path: return a string
-	@RequestMapping(path = "/match_test", method = RequestMethod.GET)
+	@RequestMapping(path = "/test", method = RequestMethod.GET)
 	public String index() {
 		return "MatchController";
 	}
