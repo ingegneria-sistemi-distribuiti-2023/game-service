@@ -83,23 +83,23 @@ public class MatchHistory {
         return awayTeamId;
     }
 
-    public void setAwayTeamId(int awayTeamId) {
+    public void setAwayTeamId(Integer awayTeamId) {
         this.awayTeamId = awayTeamId;
     }
 
-    public int getHomeTeamScore() {
+    public Integer getHomeTeamScore() {
         return homeTeamScore;
     }
 
-    public void setHomeTeamScore(int homeTeamScore) {
+    public void setHomeTeamScore(Integer homeTeamScore) {
         this.homeTeamScore = homeTeamScore;
     }
 
-    public int getAwayTeamScore() {
+    public Integer getAwayTeamScore() {
         return awayTeamScore;
     }
 
-    public void setAwayTeamScore(int awayTeamScore) {
+    public void setAwayTeamScore(Integer awayTeamScore) {
         this.awayTeamScore = awayTeamScore;
     }
 

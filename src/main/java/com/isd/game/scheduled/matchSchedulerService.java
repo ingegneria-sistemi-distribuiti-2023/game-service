@@ -79,6 +79,10 @@ public class matchSchedulerService {
             match.setEndTime(null);
             match.setHomeTeamScore(0);
             match.setAwayTeamScore(0);
+            // set initial payouts of the match  // TODO: define a better logic for this
+            match.setHomeWinPayout(1 + (Math.random() * 2));
+            match.setDrawPayout(1 + (Math.random() * 2));
+            match.setAwayWinPayout(1 + (Math.random() * 2));
             match.setStatus(MatchStatus.TO_BE_PLAYED);
             match.setInGameMinute(0);
             matchMapperService.createNewMatch(match);
@@ -112,7 +116,7 @@ public class matchSchedulerService {
 
             } else if (((matchStartTime.compareTo(currentTime) <= 0)) && !(match.getStatus().equals(MatchStatus.FINISHED))) {
                 // generate a random number between 0 and 1
-                int random = (int) (Math.random() * 10);
+                Integer random = (int) (Math.random() * 10);
                 // if the random number is 0, add a goal to the home team
                 switch (random) {
                     case 0:
@@ -126,6 +130,11 @@ public class matchSchedulerService {
                         break;
                 }
                 match.setStatus(MatchStatus.PLAYING);
+
+                // update homeWinPayout, drawPayout // TODO: define a better logic for this
+                match.setHomeWinPayout(1 + (Math.random() * 2));
+                match.setDrawPayout(1 + (Math.random() * 2));
+                match.setAwayWinPayout(1 + (Math.random() * 2));
 
                 // update inGameMinute, map the real time elapsed to the start of the match in a range of 0 to 90 minutes in game where 0 is the start of the match and 90 is the start time plus 10 minutes
                 long matchStartTimeStamp = match.getStartTime().getTime();

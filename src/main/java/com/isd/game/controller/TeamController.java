@@ -52,7 +52,7 @@ public class TeamController {
 
 	// return a team by id
 	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody TeamDto team(@PathVariable("id") int id) {
+	public @ResponseBody TeamDto team(@PathVariable("id") Integer id) {
 		return teamMapperService.findTeam(id);
 	}
 

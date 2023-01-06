@@ -18,6 +18,8 @@ services:
     networks:
       - game-network
       - game-db-network
+    volumes:
+      - maven_packages:/root/.m2
 
 
 networks: 
@@ -25,3 +27,7 @@ networks:
     name: game-network
   game-db-network:
     name: game-db-network
+
+volumes:
+  maven_packages:
+    name: maven_packages

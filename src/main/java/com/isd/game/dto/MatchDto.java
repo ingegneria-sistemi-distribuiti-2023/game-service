@@ -6,14 +6,17 @@ import com.isd.game.commons.MatchStatus;
 
 public class MatchDto {
     // this DTO contains the match ID, IDs of the teams, the home and away scores, the start time and the end time of the match
-    private int id;
-    private int homeTeamId;
-    private int awayTeamId;
+    private Integer id;
+    private Integer homeTeamId;
+    private Integer awayTeamId;
     private String homeTeamName;
     private String awayTeamName;
-    private int homeTeamScore;
-    private int awayTeamScore;
-    private int inGameMinute;
+    private Integer homeTeamScore;
+    private Integer awayTeamScore;
+    private Double homeWinPayout;
+    private Double awayWinPayout;
+    private Double drawPayout;
+    private Integer inGameMinute;
     private Date startTime;
     private Date endTime;
     private MatchStatus status;
@@ -21,7 +24,7 @@ public class MatchDto {
     public MatchDto() {
     }
 
-    public MatchDto( int id, int homeTeamId, int awayTeamId, String homeTeamName, String awayTeamName,int homeTeamScore, int inGameMinute, int awayTeamScore, Date startTime, Date endTime, MatchStatus status) {
+    public MatchDto( Integer id, Integer homeTeamId, Integer awayTeamId, String homeTeamName, String awayTeamName,Integer homeTeamScore, Double homeWinPayout, Double awayWinPayout, Double drawPayout, Integer inGameMinute, Integer awayTeamScore, Date startTime, Date endTime, MatchStatus status) {
         this.id = id;
         this.homeTeamId = homeTeamId;
         this.awayTeamId = awayTeamId;
@@ -29,33 +32,36 @@ public class MatchDto {
         this.awayTeamName = awayTeamName;
         this.homeTeamScore = homeTeamScore;
         this.awayTeamScore = awayTeamScore;
+        this.homeWinPayout = homeWinPayout;
+        this.awayWinPayout = awayWinPayout;
+        this.drawPayout = drawPayout;
         this.inGameMinute = inGameMinute;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getHomeTeamId() {
+    public Integer getHomeTeamId() {
         return homeTeamId;
     }
 
-    public void setHomeTeamId(int homeTeamId) {
+    public void setHomeTeamId(Integer homeTeamId) {
         this.homeTeamId = homeTeamId;
     }
 
-    public int getAwayTeamId() {
+    public Integer getAwayTeamId() {
         return awayTeamId;
     }
 
-    public void setAwayTeamId(int awayTeamId) {
+    public void setAwayTeamId(Integer awayTeamId) {
         this.awayTeamId = awayTeamId;
     }
 
@@ -75,27 +81,51 @@ public class MatchDto {
         this.awayTeamName = awayTeamName;
     }
 
-    public int getHomeTeamScore() {
+    public Integer getHomeTeamScore() {
         return homeTeamScore;
     }
 
-    public void setHomeTeamScore(int homeTeamScore) {
+    public void setHomeTeamScore(Integer homeTeamScore) {
         this.homeTeamScore = homeTeamScore;
     }
 
-    public int getAwayTeamScore() {
+    public Integer getAwayTeamScore() {
         return awayTeamScore;
     }
 
-    public void setAwayTeamScore(int awayTeamScore) {
+    public void setAwayTeamScore(Integer awayTeamScore) {
         this.awayTeamScore = awayTeamScore;
     }
 
-    public int getInGameMinute() {
+    public Double getHomeWinPayout() {
+        return homeWinPayout;
+    }
+
+    public void setHomeWinPayout(Double homeWinPayout) {
+        this.homeWinPayout = homeWinPayout;
+    }
+
+    public Double getAwayWinPayout() {
+        return awayWinPayout;
+    }
+
+    public void setAwayWinPayout(Double awayWinPayout) {
+        this.awayWinPayout = awayWinPayout;
+    }
+
+    public Double getDrawPayout() {
+        return drawPayout;
+    }
+
+    public void setDrawPayout(Double drawPayout) {
+        this.drawPayout = drawPayout;
+    }
+
+    public Integer getInGameMinute() {
         return inGameMinute;
     }
 
-    public void setInGameMinute(int inGameMinute) {
+    public void setInGameMinute(Integer inGameMinute) {
         this.inGameMinute = inGameMinute;
     }
 
@@ -125,9 +155,11 @@ public class MatchDto {
 
     @Override
     public String toString() {
-        return "MatchDto [awayTeamId=" + awayTeamId + ", awayTeamName=" + awayTeamName + ", awayTeamScore=" + awayTeamScore +
-         ", endTime=" + endTime + ", homeTeamId=" + homeTeamId + ", homeTeamName=" + homeTeamName + ", homeTeamScore=" +
-          homeTeamScore + ", id=" + id + ", inGameMinute=" + inGameMinute + ", startTime=" + startTime + ", status=" + status + "]";
+        return "MatchDto [id=" + id + ", homeTeamId=" + homeTeamId + ", awayTeamId=" + awayTeamId + ", homeTeamName="
+                + homeTeamName + ", awayTeamName=" + awayTeamName + ", homeTeamScore=" + homeTeamScore
+                + ", awayTeamScore=" + awayTeamScore + ", homeWinPayout=" + homeWinPayout + ", awayWinPayout="
+                + awayWinPayout + ", drawPayout=" + drawPayout + ", inGameMinute=" + inGameMinute + ", startTime="
+                + startTime + ", endTime=" + endTime + ", status=" + status + "]";
     }
 
     // override the equals method to compare two MatchDto objects
@@ -173,6 +205,24 @@ public class MatchDto {
         } else if (!startTime.equals(other.startTime))
             return false;
         if (status != other.status)
+            return false;
+        // check homeWinPayout
+        if (homeWinPayout == null) {
+            if (other.homeWinPayout != null)
+                return false;
+        } else if (!homeWinPayout.equals(other.homeWinPayout))
+            return false;
+        // check awayWinPayout
+        if (awayWinPayout == null) {
+            if (other.awayWinPayout != null)
+                return false;
+        } else if (!awayWinPayout.equals(other.awayWinPayout))
+            return false;
+        // check drawPayout
+        if (drawPayout == null) {
+            if (other.drawPayout != null)
+                return false;
+        } else if (!drawPayout.equals(other.drawPayout))
             return false;
         return true;
     }

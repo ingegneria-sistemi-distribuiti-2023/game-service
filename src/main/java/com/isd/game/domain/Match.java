@@ -37,6 +37,15 @@ public class Match {
     @Column(name = "away_score")
     private Integer awayTeamScore;
 
+    @Column(name = "home_win_payout")
+    private Double homeWinPayout;
+
+    @Column(name = "away_win_payout")
+    private Double awayWinPayout;
+
+    @Column(name = "draw_payout")
+    private Double drawPayout;
+
     @Column(name = "in_game_minute")
     private Integer inGameMinute;
 
@@ -56,11 +65,14 @@ public class Match {
     public Match() {
     }
 
-    public Match(Integer homeTeamId, Integer awayTeamId, Integer homeTeamScore, Integer awayTeamScore, Integer inGameMinute, Date startTime, Date endTime, MatchStatus status) {
+    public Match(Integer homeTeamId, Integer awayTeamId, Integer homeTeamScore, Integer awayTeamScore, Double homeWinPayout, Double awayWinPayout, Double drawPayout, Integer inGameMinute, Date startTime, Date endTime, MatchStatus status) {
         this.homeTeamId = homeTeamId;
         this.awayTeamId = awayTeamId;
         this.homeTeamScore = homeTeamScore;
         this.awayTeamScore = awayTeamScore;
+        this.homeWinPayout = homeWinPayout;
+        this.awayWinPayout = awayWinPayout;
+        this.drawPayout = drawPayout;
         this.inGameMinute = inGameMinute;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -87,23 +99,23 @@ public class Match {
         return awayTeamId;
     }
 
-    public void setAwayTeamId(int awayTeamId) {
+    public void setAwayTeamId(Integer awayTeamId) {
         this.awayTeamId = awayTeamId;
     }
 
-    public int getHomeTeamScore() {
+    public Integer getHomeTeamScore() {
         return homeTeamScore;
     }
 
-    public void setHomeTeamScore(int homeTeamScore) {
+    public void setHomeTeamScore(Integer homeTeamScore) {
         this.homeTeamScore = homeTeamScore;
     }
 
-    public int getAwayTeamScore() {
+    public Integer getAwayTeamScore() {
         return awayTeamScore;
     }
 
-    public void setAwayTeamScore(int awayTeamScore) {
+    public void setAwayTeamScore(Integer awayTeamScore) {
         this.awayTeamScore = awayTeamScore;
     }
 
@@ -139,10 +151,45 @@ public class Match {
         this.status = status;
     }
 
+    public Double getHomeWinPayout() {
+        return homeWinPayout;
+    }
+
+    public void setHomeWinPayout(Double homeWinPayout) {
+        this.homeWinPayout = homeWinPayout;
+    }
+
+    public Double getAwayWinPayout() {
+        return awayWinPayout;
+    }
+
+    public void setAwayWinPayout(Double awayWinPayout) {
+        this.awayWinPayout = awayWinPayout;
+    }
+
+    public Double getDrawPayout() {
+        return drawPayout;
+    }
+
+    public void setDrawPayout(Double drawPayout) {
+        this.drawPayout = drawPayout;
+    }
+
     @Override
     public String toString() {
-        return "Match [awayTeamId=" + awayTeamId + ", awayTeamScore=" + awayTeamScore + ", endTime=" + endTime +
-         ", homeTeamId=" + homeTeamId + ", homeTeamScore=" + homeTeamScore + ", id=" + id + ", inGameMinute=" +
-          inGameMinute + ", startTime=" + startTime + ", status=" + status + "]";
+        return "Match{" +
+                "id=" + id +
+                ", homeTeamId=" + homeTeamId +
+                ", awayTeamId=" + awayTeamId +
+                ", homeTeamScore=" + homeTeamScore +
+                ", awayTeamScore=" + awayTeamScore +
+                ", homeWinPayout=" + homeWinPayout +
+                ", awayWinPayout=" + awayWinPayout +
+                ", drawPayout=" + drawPayout +
+                ", inGameMinute=" + inGameMinute +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", status=" + status +
+                '}';
     }
 }

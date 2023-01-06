@@ -30,6 +30,7 @@ import com.isd.game.repository.TeamRepository;
 @Service
 @Transactional
 public class MatchMapperService {
+    // TODO: edit this service, this should only be a mapper, not a service
     // @Autowired annotation is used to inject the object dependency implicitly.
     @Autowired
     private MatchRepository matchRepository;
@@ -52,6 +53,9 @@ public class MatchMapperService {
         matchDto.setAwayTeamName(teamRepository.findById(match.getAwayTeamId()).get().getName());
         matchDto.setHomeTeamScore(match.getHomeTeamScore());
         matchDto.setAwayTeamScore(match.getAwayTeamScore());
+        matchDto.setHomeWinPayout(match.getHomeWinPayout());
+        matchDto.setAwayWinPayout(match.getAwayWinPayout());
+        matchDto.setDrawPayout(match.getDrawPayout());
         matchDto.setInGameMinute(match.getInGameMinute());
         matchDto.setStartTime(match.getStartTime());
         matchDto.setEndTime(match.getEndTime());
@@ -66,6 +70,9 @@ public class MatchMapperService {
         match.setAwayTeamId(matchDto.getAwayTeamId());
         match.setHomeTeamScore(matchDto.getHomeTeamScore());
         match.setAwayTeamScore(matchDto.getAwayTeamScore());
+        match.setHomeWinPayout(matchDto.getHomeWinPayout());
+        match.setAwayWinPayout(matchDto.getAwayWinPayout());
+        match.setDrawPayout(matchDto.getDrawPayout());
         match.setInGameMinute(matchDto.getInGameMinute());
         match.setStartTime(matchDto.getStartTime());
         match.setEndTime(matchDto.getEndTime());
@@ -81,6 +88,9 @@ public class MatchMapperService {
         match.setAwayTeamId(matchDto.getAwayTeamId());
         match.setHomeTeamScore(matchDto.getHomeTeamScore());
         match.setAwayTeamScore(matchDto.getAwayTeamScore());
+        match.setHomeWinPayout(matchDto.getHomeWinPayout());
+        match.setAwayWinPayout(matchDto.getAwayWinPayout());
+        match.setDrawPayout(matchDto.getDrawPayout());
         match.setInGameMinute(matchDto.getInGameMinute());
         match.setStartTime(matchDto.getStartTime());
         match.setEndTime(matchDto.getEndTime());

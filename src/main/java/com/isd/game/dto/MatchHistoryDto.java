@@ -6,13 +6,13 @@ import com.isd.game.commons.MatchStatus;
 
 public class MatchHistoryDto {
     // this DTO contains the match ID, IDs of the teams, the home and away scores, the start time and the end time of the match
-    private int id;
-    private int homeTeamId;
-    private int awayTeamId;
+    private Integer id;
+    private Integer homeTeamId;
+    private Integer awayTeamId;
     private String homeTeamName;
     private String awayTeamName;
-    private int homeTeamScore;
-    private int awayTeamScore;
+    private Integer homeTeamScore;
+    private Integer awayTeamScore;
     private Date startTime;
     private Date endTime;
     private MatchStatus status;
@@ -20,7 +20,7 @@ public class MatchHistoryDto {
     public MatchHistoryDto() {
     }
 
-    public MatchHistoryDto( int id, int homeTeamId, int awayTeamId, String homeTeamName, String awayTeamName,int homeTeamScore, int awayTeamScore, Date startTime, Date endTime, MatchStatus status) {
+    public MatchHistoryDto( Integer id, Integer homeTeamId, Integer awayTeamId, String homeTeamName, String awayTeamName,Integer homeTeamScore, Integer awayTeamScore, Date startTime, Date endTime, MatchStatus status) {
         this.id = id;
         this.homeTeamId = homeTeamId;
         this.awayTeamId = awayTeamId;
@@ -33,27 +33,27 @@ public class MatchHistoryDto {
         this.status = status;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getHomeTeamId() {
+    public Integer getHomeTeamId() {
         return homeTeamId;
     }
 
-    public void setHomeTeamId(int homeTeamId) {
+    public void setHomeTeamId(Integer homeTeamId) {
         this.homeTeamId = homeTeamId;
     }
 
-    public int getAwayTeamId() {
+    public Integer getAwayTeamId() {
         return awayTeamId;
     }
 
-    public void setAwayTeamId(int awayTeamId) {
+    public void setAwayTeamId(Integer awayTeamId) {
         this.awayTeamId = awayTeamId;
     }
 
@@ -73,19 +73,19 @@ public class MatchHistoryDto {
         this.awayTeamName = awayTeamName;
     }
 
-    public int getHomeTeamScore() {
+    public Integer getHomeTeamScore() {
         return homeTeamScore;
     }
 
-    public void setHomeTeamScore(int homeTeamScore) {
+    public void setHomeTeamScore(Integer homeTeamScore) {
         this.homeTeamScore = homeTeamScore;
     }
 
-    public int getAwayTeamScore() {
+    public Integer getAwayTeamScore() {
         return awayTeamScore;
     }
 
-    public void setAwayTeamScore(int awayTeamScore) {
+    public void setAwayTeamScore(Integer awayTeamScore) {
         this.awayTeamScore = awayTeamScore;
     }
 

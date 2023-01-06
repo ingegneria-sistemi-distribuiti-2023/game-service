@@ -38,8 +38,8 @@ public class MatchTests {
 	public void matchAllShouldReturnAListOfMatchFromService() throws Exception {
 		when(matchMapperService.getAllData()).thenReturn(
             Arrays.asList(
-                new MatchDto(1, 1,2, "Team 1", "Team 2", 2, 45, 3, new Date(), null, MatchStatus.PLAYING),
-                new MatchDto(2, 4,5, "Team 4", "Team 5", 1, 60, 0, new Date(), null, MatchStatus.PLAYING)
+                new MatchDto(1, 1, 2, "Team 1", "Team 2", 2, 1.5, 1.3, 2d, 45, 3, new Date(), null, MatchStatus.PLAYING),
+                new MatchDto(5, 7, 3, "Team 7", "Team 3", 1, 1.1, 3d, 2d, 88, 0, new Date(), null, MatchStatus.PLAYING)
                 )
             );
 
@@ -49,7 +49,7 @@ public class MatchTests {
 		MvcResult result = this.mockMvc.perform(get("/match/all")).andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("Team 1")))
-			.andExpect(content().string(containsString("Team 5")))
+			.andExpect(content().string(containsString("Team 7")))
 			.andReturn();
 
 		// check if result is equal to the expected DTOs
@@ -62,4 +62,6 @@ public class MatchTests {
 			assertEquals(matchDtos[i], matchMapperService.getAllData().get(i));
 		}
 	}
+
+	// TODO: once the payout logic is implemented, add more tests
 }

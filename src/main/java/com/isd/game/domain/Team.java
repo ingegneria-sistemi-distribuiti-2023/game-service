@@ -17,7 +17,7 @@ public class Team {
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false, insertable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment in MySQL
-    private int id;
+    private Integer id;
 
     private String name;
 
@@ -28,11 +28,11 @@ public class Team {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
