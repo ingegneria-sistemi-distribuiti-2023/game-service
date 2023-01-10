@@ -3,6 +3,7 @@ package com.isd.game.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.isd.game.domain.Match;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.isd.game.domain.MatchHistory;
@@ -22,4 +23,7 @@ public interface MatchHistoryRepository extends JpaRepository<MatchHistory, Inte
     boolean existsById(Integer id);
 
     List<MatchHistory> findAll();
+
+    List<MatchHistory> findAllByHomeTeamIdOrAwayTeamId(Integer homeId, Integer awayId);
+
 }

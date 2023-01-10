@@ -1,8 +1,17 @@
 package com.isd.game.mapper;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.isd.game.domain.Match;
+import com.isd.game.domain.MatchHistory;
+import com.isd.game.dto.MatchDto;
+import com.isd.game.dto.MatchHistoryDto;
+import com.isd.game.dto.TeamHistoryDTO;
+import com.isd.game.repository.MatchHistoryRepository;
+import com.isd.game.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +41,12 @@ public class TeamMapperService {
     // @Autowired annotation is used to inject the object dependency implicitly.
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private MatchHistoryRepository matchHistoryRepository;
+
+    @Autowired
+    private MatchHistoryMapperService mhps;
 
     // get all the data from the database
     public List<TeamDto> getAllData() {
@@ -78,5 +93,40 @@ public class TeamMapperService {
             throw new RuntimeException("Team with id " + id + " does not exist");
         }
         return convertToDto(teamRepository.findById(id).get());
+    }
+
+    // find a record in the database
+    public TeamHistoryDTO findHistoryOfTeam(Integer id) {
+        //check if the team exists
+
+        TeamHistoryDTO toRet = new TeamHistoryDTO();
+
+        Team team = teamRepository.findOneById(id);
+
+//      NOTA PER MARCO: conviene istanziare un oggetto e non fare in questo modo perché mi avevano spiegato che dovrebbe cambiare chiamate a livello di DB
+//        .. in questo esempio tu prima chiami l'exist e fai la query e successivamente ne fai un'altra query per trovare il team
+//        if (!teamRepository.existsById(id)) {
+        if (team == null) {
+            throw new RuntimeException("Team with id " + id + " does not exist");
+        }
+
+        // TODO: In questo caso credo pure dovrebbe essere più performante usare teamId invece che chiamare team.getId() su toRet.setId() e mr.findAllBy..(), verificare
+        Integer teamId = team.getId();
+
+        toRet.setId(teamId);
+        toRet.setName(team.getName());
+
+        List<MatchHistory> list = matchHistoryRepository.findAllByHomeTeamIdOrAwayTeamId(teamId, teamId);
+        List<MatchHistoryDto> listDto = new ArrayList<>();
+
+        for (MatchHistory m : list){
+            listDto.add(mhps.convertToDto(m));
+        }
+
+        toRet.setMatches(listDto);
+
+//        return convertToDto(teamRepository.findById(id).get());
+        return toRet;
+
     }
 }

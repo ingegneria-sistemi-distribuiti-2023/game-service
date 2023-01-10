@@ -1,5 +1,6 @@
 package com.isd.game.controller;
 
+import com.isd.game.dto.TeamHistoryDTO;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isd.game.dto.TeamDto;
@@ -49,10 +50,9 @@ public class TeamController {
 		return teamMapperService.getAllData();
 	}
 
-	// return a team by id
 	@RequestMapping(path = "/team/{id}", method = RequestMethod.GET)
-	public @ResponseBody TeamDto team(@PathVariable("id") Integer id) {
-		return teamMapperService.findTeam(id);
+	public @ResponseBody TeamHistoryDTO team(@PathVariable("id") Integer id) {
+		return teamMapperService.findHistoryOfTeam(id);
 	}
 
 	// Theese APIs must be private or protected by role
