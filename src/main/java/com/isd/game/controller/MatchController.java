@@ -1,15 +1,11 @@
 package com.isd.game.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.isd.game.dto.MatchDto;
 import com.isd.game.mapper.MatchMapperService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**
@@ -32,24 +28,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/match")
 public class MatchController {
 
+	// TODO: Non sono state previste al momento quindi le disabilito per evitare confusioen
+
 	@Autowired
 	private MatchMapperService matchMapperService;
 
 	// default path: return a string
-	@RequestMapping(path = "/test", method = RequestMethod.GET)
-	public String index() {
-		return "MatchController";
-	}
+//	@RequestMapping(path = "/test", method = RequestMethod.GET)
+//	public String index() {
+//		return "MatchController";
+//	}
 
 	// return all the matches
-	@RequestMapping(path = "/all", method = RequestMethod.GET)
+	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public @ResponseBody Iterable<MatchDto> all() {
 		return matchMapperService.getAllData();
 	}
 
 	// return a match by id
-	@RequestMapping(path = "/id", method = RequestMethod.POST)
-	public @ResponseBody MatchDto id(@RequestBody MatchDto matchDto) {
-		return matchMapperService.findMatch(matchDto.getId());
+	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
+	public @ResponseBody MatchDto id(@PathVariable("id") Integer id) {
+		return matchMapperService.findMatch(id);
 	}
 }

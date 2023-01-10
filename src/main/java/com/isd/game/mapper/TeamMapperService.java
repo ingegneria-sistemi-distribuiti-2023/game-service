@@ -47,9 +47,9 @@ public class TeamMapperService {
     }
 
     // create a new record in the database
-    public TeamDto createNewRecord(TeamDto teamDto) {
+    public TeamDto createNewRecord(String newTeam) {
         Team team = new Team();
-        team.setName(teamDto.getName());
+        team.setName(newTeam);
         teamRepository.save(team);
         return convertToDto(team);
     }

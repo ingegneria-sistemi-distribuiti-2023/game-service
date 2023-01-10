@@ -30,35 +30,43 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Controller is a specialization of Component that allows for implementation classes to be autodetected through classpath scanning
  */
 @RestController()// @Controller + @ResponseBody
-@RequestMapping("/team")
+@RequestMapping("/game")
 public class TeamController {
-
 
 	@Autowired
 	private TeamMapperService teamMapperService;
 
+	// TODO: Deprecare ?
 	// default path: return a string
-	@RequestMapping(path = "/team_test", method = RequestMethod.GET)
-	public String index() {
-		return "TeamController";
-	}
-	
+//	@RequestMapping(path = "/team_test", method = RequestMethod.GET)
+//	public String index() {
+//		return "TeamController";
+//	}
 
-	// return all the teams
-	@RequestMapping(path = "/all", method = RequestMethod.GET)
+	// return list of all games
+	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public @ResponseBody Iterable<TeamDto> teams() {
 		return teamMapperService.getAllData();
 	}
 
 	// return a team by id
-	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/team/{id}", method = RequestMethod.GET)
 	public @ResponseBody TeamDto team(@PathVariable("id") Integer id) {
 		return teamMapperService.findTeam(id);
 	}
 
+	// Theese APIs must be private or protected by role
+
 	// create a new team given a name
-	@RequestMapping(path = "/create", method = RequestMethod.POST)
-	public @ResponseBody TeamDto create(@RequestBody TeamDto teamDto) {
-		return teamMapperService.createNewRecord(teamDto);
+	@RequestMapping(path = "/team/", method = RequestMethod.POST)
+	public @ResponseBody TeamDto create(@RequestBody String teamName) {
+		return teamMapperService.createNewRecord(teamName);
 	}
+
+	// create a new team given a name
+//	TODO: Must add 'enabled' field before
+//	@RequestMapping(path = "/team/disable", method = RequestMethod.POST)
+//	public @ResponseBody TeamDto disable(@RequestBody Integer teamId) {
+//		return teamMapperService.createNewRecord(teamDto);
+//	}
 }
