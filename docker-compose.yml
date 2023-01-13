@@ -1,18 +1,18 @@
 version: '3.3'
 
 services:
-  game_service:
+  game-service:
     build:
       context: .
       dockerfile: Dockerfile
     # depends_on:
     #   match_db:
     #     condition: service_healthy
-    restart: always
+    restart: unless-stopped
     ports:
       - 8081:8081
     environment:
-      JDBC_DATABASE_URL: jdbc:mysql://match_db:3306/gamedb?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+      JDBC_DATABASE_URL: jdbc:mysql://match-db:3306/gamedb?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
       JDBC_DATABASE_PASSWORD: root
       JDBC_DATABASE_USERNAME: root
     networks:
