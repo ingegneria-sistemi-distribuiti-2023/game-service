@@ -123,7 +123,7 @@ public class TeamMapperService {
             listDto.add(mhps.convertToDto(m));
         }
 
-        toRet.setMatches(listDto);
+        toRet.setPlayedGames(listDto);
 
 //        return convertToDto(teamRepository.findById(id).get());
         return toRet;
