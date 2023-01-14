@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.isd.game.domain.Match;
-import com.isd.game.dto.MatchDto;
+import com.isd.game.dto.MatchDTO;
 import com.isd.game.repository.MatchRepository;
 import com.isd.game.repository.TeamRepository;
 
@@ -39,13 +39,13 @@ public class MatchMapperService {
     private TeamRepository teamRepository;
 
     // get all the data from the database
-    public List<MatchDto> getAllData() {
+    public List<MatchDTO> getAllData() {
         return matchRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     // convert the data from the database to a DTO
-    public MatchDto convertToDto(Match match) {
-        MatchDto matchDto = new MatchDto();
+    public MatchDTO convertToDto(Match match) {
+        MatchDTO matchDto = new MatchDTO();
         matchDto.setId(match.getId());
         matchDto.setHomeTeamId(match.getHomeTeamId());
         matchDto.setAwayTeamId(match.getAwayTeamId());
@@ -64,7 +64,7 @@ public class MatchMapperService {
     }
 
     // create a new record in the database
-    public MatchDto createNewMatch(MatchDto matchDto) {
+    public MatchDTO createNewMatch(MatchDTO matchDto) {
         Match match = new Match();
         match.setHomeTeamId(matchDto.getHomeTeamId());
         match.setAwayTeamId(matchDto.getAwayTeamId());
@@ -82,7 +82,7 @@ public class MatchMapperService {
     }
 
     // update a record in the database
-    public MatchDto updateMatch(MatchDto matchDto) {
+    public MatchDTO updateMatch(MatchDTO matchDto) {
         Match match = matchRepository.findById(matchDto.getId()).get();
         match.setHomeTeamId(matchDto.getHomeTeamId());
         match.setAwayTeamId(matchDto.getAwayTeamId());
@@ -109,7 +109,7 @@ public class MatchMapperService {
     }
 
     // find a record in the database
-    public MatchDto findMatch(Integer id) {
+    public MatchDTO findMatch(Integer id) {
         //check if the match exists
         if (!matchRepository.existsById(id)) {
             throw new RuntimeException("Match with id " + id + " does not exist");

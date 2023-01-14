@@ -1,23 +1,19 @@
 package com.isd.game.mapper;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.isd.game.domain.Match;
 import com.isd.game.domain.MatchHistory;
-import com.isd.game.dto.MatchDto;
-import com.isd.game.dto.MatchHistoryDto;
+import com.isd.game.dto.MatchHistoryDTO;
 import com.isd.game.dto.TeamHistoryDTO;
 import com.isd.game.repository.MatchHistoryRepository;
-import com.isd.game.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.isd.game.domain.Team;
-import com.isd.game.dto.TeamDto;
+import com.isd.game.dto.TeamDTO;
 import com.isd.game.repository.TeamRepository;
 
 
@@ -49,20 +45,20 @@ public class TeamMapperService {
     private MatchHistoryMapperService mhps;
 
     // get all the data from the database
-    public List<TeamDto> getAllData() {
+    public List<TeamDTO> getAllData() {
         return teamRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     // convert the data from the database to a DTO
-    public TeamDto convertToDto(Team team) {
-        TeamDto teamDto = new TeamDto();
+    public TeamDTO convertToDto(Team team) {
+        TeamDTO teamDto = new TeamDTO();
         teamDto.setId(team.getId());
         teamDto.setName(team.getName());
         return teamDto;
     }
 
     // create a new record in the database
-    public TeamDto createNewRecord(String newTeam) {
+    public TeamDTO createNewRecord(String newTeam) {
         Team team = new Team();
         team.setName(newTeam);
         teamRepository.save(team);
@@ -70,7 +66,7 @@ public class TeamMapperService {
     }
 
     // update a record in the database
-    public TeamDto updateTeam(TeamDto teamDto) {
+    public TeamDTO updateTeam(TeamDTO teamDto) {
         Team team = teamRepository.findById(teamDto.getId()).get();
         team.setName(teamDto.getName());
         teamRepository.save(team);
@@ -87,7 +83,7 @@ public class TeamMapperService {
     }
 
     // find a record in the database
-    public TeamDto findTeam(Integer id) {
+    public TeamDTO findTeam(Integer id) {
         //check if the team exists
         if (!teamRepository.existsById(id)) {
             throw new RuntimeException("Team with id " + id + " does not exist");
@@ -117,7 +113,7 @@ public class TeamMapperService {
         toRet.setName(team.getName());
 
         List<MatchHistory> list = matchHistoryRepository.findAllByHomeTeamIdOrAwayTeamId(teamId, teamId);
-        List<MatchHistoryDto> listDto = new ArrayList<>();
+        List<MatchHistoryDTO> listDto = new ArrayList<>();
 
         for (MatchHistory m : list){
             listDto.add(mhps.convertToDto(m));

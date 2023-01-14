@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TeamDto {
+public class TeamDTO {
     // this DTO contains the id and the name of the team
     private Integer id;
     private String name;

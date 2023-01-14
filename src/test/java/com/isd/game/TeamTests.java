@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.isd.game.controller.TeamController;
-import com.isd.game.dto.TeamDto;
+import com.isd.game.dto.TeamDTO;
 import com.isd.game.mapper.TeamMapperService;
 
 // narrow down the tests to just the web layer, 
@@ -37,8 +37,8 @@ public class TeamTests {
 	public void teamAllShouldReturnAListOfTeamsFromService() throws Exception {
 		when(teamMapperService.getAllData()).thenReturn(
             Arrays.asList(
-                new TeamDto(1, "Team 1"),
-                new TeamDto(2, "Team 2")
+                new TeamDTO(1, "Team 1"),
+                new TeamDTO(2, "Team 2")
                 )
             );
 
@@ -53,7 +53,7 @@ public class TeamTests {
 
         // check if result is equal to the expected DTOs
         JsonMapper mapper = new JsonMapper();
-        TeamDto[] teamDtos = mapper.readValue(result.getResponse().getContentAsString(), TeamDto[].class);
+        TeamDTO[] teamDtos = mapper.readValue(result.getResponse().getContentAsString(), TeamDTO[].class);
 
         // teamDtos[0].setId(99); // this will fail the test
 

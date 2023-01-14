@@ -11,8 +11,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.isd.game.commons.MatchStatus;
-import com.isd.game.dto.MatchDto;
-import com.isd.game.dto.TeamDto;
+import com.isd.game.dto.MatchDTO;
+import com.isd.game.dto.TeamDTO;
 import com.isd.game.mapper.MatchHistoryMapperService;
 import com.isd.game.mapper.MatchMapperService;
 import com.isd.game.mapper.TeamMapperService;
@@ -44,18 +44,18 @@ public class matchSchedulerService {
     @Scheduled(fixedRate = 10000)
     public void createMatch() {
         // fetch all teams from database
-        List<TeamDto> teams = teamMapperService.getAllData();
+        List<TeamDTO> teams = teamMapperService.getAllData();
         // fetch all matches from database
-        List<MatchDto> matches = matchMapperService.getAllData();
+        List<MatchDTO> matches = matchMapperService.getAllData();
         // find two teams that are not in a match that ended
-        TeamDto homeTeam = null;
-        TeamDto awayTeam = null;
+        TeamDTO homeTeam = null;
+        TeamDTO awayTeam = null;
         // shuffle the teams and matches
         java.util.Collections.shuffle(teams);
         java.util.Collections.shuffle(matches);
-        for (TeamDto team : teams) {
+        for (TeamDTO team : teams) {
             boolean teamInMatch = false;
-            for (MatchDto match : matches) {
+            for (MatchDTO match : matches) {
                 if ((match.getHomeTeamId() == team.getId() || match.getAwayTeamId() == team.getId()) && !match.getStatus().equals(MatchStatus.FINISHED)) {
                     teamInMatch = true;
                     break;
@@ -72,7 +72,7 @@ public class matchSchedulerService {
         }
         // if we found two teams, create a new match between them that will start in 2 to 5 minutes
         if (homeTeam != null && awayTeam != null) {
-            MatchDto match = new MatchDto();
+            MatchDTO match = new MatchDTO();
             match.setHomeTeamId(homeTeam.getId());
             match.setAwayTeamId(awayTeam.getId());
             match.setStartTime(new Date(new Date().getTime() + TimeUnit.MINUTES.toMillis(2 + (int) (Math.random() * 3)) ));
@@ -96,7 +96,7 @@ public class matchSchedulerService {
     @Scheduled(fixedRate = 20000)
     public void updateMatchScore() {
         // fetch all matches from database
-        List<MatchDto> matches = matchMapperService.getAllData();
+        List<MatchDTO> matches = matchMapperService.getAllData();
         // update the score of each match
         matches.forEach(match -> {
             // if the match started more than 10 minutes ago, do not update the score
@@ -157,7 +157,7 @@ public class matchSchedulerService {
     @Scheduled(fixedRate = 600000)
     public void deleteMatch() {
         // fetch all matches from database
-        List<MatchDto> matches = matchMapperService.getAllData();
+        List<MatchDTO> matches = matchMapperService.getAllData();
         matches.forEach(match -> {
             long matchStartTimeStamp = match.getStartTime().getTime();
             long matchEndTimeStamp = new Date().getTime();

@@ -3,7 +3,7 @@ package com.isd.game.controller;
 import com.isd.game.dto.TeamHistoryDTO;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.isd.game.dto.TeamDto;
+import com.isd.game.dto.TeamDTO;
 import com.isd.game.mapper.TeamMapperService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class TeamController {
 
 	// return list of all games
 	@RequestMapping(path = "/", method = RequestMethod.GET)
-	public @ResponseBody Iterable<TeamDto> teams() {
+	public @ResponseBody Iterable<TeamDTO> teams() {
 		return teamMapperService.getAllData();
 	}
 
@@ -59,7 +59,8 @@ public class TeamController {
 
 	// create a new team given a name
 	@RequestMapping(path = "/team/", method = RequestMethod.POST)
-	public @ResponseBody TeamDto create(@RequestBody String teamName) {
+	public @ResponseBody
+    TeamDTO create(@RequestBody String teamName) {
 		return teamMapperService.createNewRecord(teamName);
 	}
 

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.isd.game.domain.MatchHistory;
-import com.isd.game.dto.MatchDto;
-import com.isd.game.dto.MatchHistoryDto;
+import com.isd.game.dto.MatchDTO;
+import com.isd.game.dto.MatchHistoryDTO;
 import com.isd.game.repository.MatchHistoryRepository;
 import com.isd.game.repository.TeamRepository;
 
@@ -39,13 +39,13 @@ public class MatchHistoryMapperService {
     private TeamRepository teamRepository;
 
     // get all the data from the database
-    public List<MatchHistoryDto> getAllData() {
+    public List<MatchHistoryDTO> getAllData() {
         return matchHistoryRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     // convert the data from the database to a DTO
-    public MatchHistoryDto convertToDto(MatchHistory match) {
-        MatchHistoryDto matchDto = new MatchHistoryDto();
+    public MatchHistoryDTO convertToDto(MatchHistory match) {
+        MatchHistoryDTO matchDto = new MatchHistoryDTO();
         matchDto.setId(match.getId());
         matchDto.setHomeTeamId(match.getHomeTeamId());
         matchDto.setAwayTeamId(match.getAwayTeamId());
@@ -59,9 +59,9 @@ public class MatchHistoryMapperService {
         return matchDto;
     }
 
-    public MatchHistoryDto createNewMatch(MatchDto matchDto) {
+    public MatchHistoryDTO createNewMatch(MatchDTO matchDto) {
         // create a MatchHistoryDto object from the MatchDto one
-        MatchHistoryDto matchHistoryDto = new MatchHistoryDto();
+        MatchHistoryDTO matchHistoryDto = new MatchHistoryDTO();
         matchHistoryDto.setHomeTeamId(matchDto.getHomeTeamId());
         matchHistoryDto.setAwayTeamId(matchDto.getAwayTeamId());
         matchHistoryDto.setHomeTeamScore(matchDto.getHomeTeamScore());
@@ -75,7 +75,7 @@ public class MatchHistoryMapperService {
 
 
     // create a new record in the database
-    public MatchHistoryDto createNewMatch(MatchHistoryDto matchDto) {
+    public MatchHistoryDTO createNewMatch(MatchHistoryDTO matchDto) {
         MatchHistory match = new MatchHistory();
         match.setHomeTeamId(matchDto.getHomeTeamId());
         match.setAwayTeamId(matchDto.getAwayTeamId());
@@ -89,7 +89,7 @@ public class MatchHistoryMapperService {
     }
 
     // update a record in the database
-    public MatchHistoryDto updateMatch(MatchHistoryDto matchDto) {
+    public MatchHistoryDTO updateMatch(MatchHistoryDTO matchDto) {
         MatchHistory match = matchHistoryRepository.findById(matchDto.getId()).get();
         match.setHomeTeamId(matchDto.getHomeTeamId());
         match.setAwayTeamId(matchDto.getAwayTeamId());
@@ -112,7 +112,7 @@ public class MatchHistoryMapperService {
     }
 
     // find a record in the database
-    public MatchHistoryDto findMatch(Integer id) {
+    public MatchHistoryDTO findMatch(Integer id) {
         //check if the match exists
         if (!matchHistoryRepository.existsById(id)) {
             throw new RuntimeException("Match with id " + id + " does not exist");
