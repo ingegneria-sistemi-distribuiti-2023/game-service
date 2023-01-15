@@ -2,9 +2,14 @@
 FROM maven:3.8.3-openjdk-17 AS maven
 
 WORKDIR /usr/src/app
+
+# MOUNT A named volume to cache the maven dependencies
+VOLUME maven_packages:/root/.m2
+COPY pom.xml ./
+RUN mvn dependency:go-offline
+
 COPY . /usr/src/app
 # Compile and package the application to an executable JAR
-# RUN mvn clean package -Dmaven.test.skip=true
 RUN mvn clean package
 
 FROM openjdk:17.0.1-jdk-slim
