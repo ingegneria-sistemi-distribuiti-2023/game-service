@@ -36,7 +36,7 @@ public class MatchMapperService {
     private MatchRepository matchRepository;
 
     @Autowired
-    private TeamRepository teamRepository;
+    private TeamRepository tr;
 
     // get all the data from the database
     public List<MatchDTO> getAllData() {
@@ -47,10 +47,10 @@ public class MatchMapperService {
     public MatchDTO convertToDto(Match match) {
         MatchDTO matchDto = new MatchDTO();
         matchDto.setId(match.getId());
-        matchDto.setHomeTeamId(match.getHomeTeamId());
-        matchDto.setAwayTeamId(match.getAwayTeamId());
-        matchDto.setHomeTeamName(teamRepository.findById(match.getHomeTeamId()).get().getName());
-        matchDto.setAwayTeamName(teamRepository.findById(match.getAwayTeamId()).get().getName());
+        matchDto.setHomeTeamId(match.getHomeTeam().getId());
+        matchDto.setAwayTeamId(match.getAwayTeam().getId());
+        matchDto.setHomeTeamName(match.getHomeTeam().getName());
+        matchDto.setAwayTeamName(match.getAwayTeam().getName());
         matchDto.setHomeTeamScore(match.getHomeTeamScore());
         matchDto.setAwayTeamScore(match.getAwayTeamScore());
         matchDto.setHomeWinPayout(match.getHomeWinPayout());
@@ -66,8 +66,10 @@ public class MatchMapperService {
     // create a new record in the database
     public MatchDTO createNewMatch(MatchDTO matchDto) {
         Match match = new Match();
-        match.setHomeTeamId(matchDto.getHomeTeamId());
-        match.setAwayTeamId(matchDto.getAwayTeamId());
+
+        match.setHomeTeam(tr.findOneById(match.getHomeTeam().getId()));
+        match.setAwayTeam(tr.findOneById(match.getAwayTeam().getId()));
+
         match.setHomeTeamScore(matchDto.getHomeTeamScore());
         match.setAwayTeamScore(matchDto.getAwayTeamScore());
         match.setHomeWinPayout(matchDto.getHomeWinPayout());
@@ -84,8 +86,8 @@ public class MatchMapperService {
     // update a record in the database
     public MatchDTO updateMatch(MatchDTO matchDto) {
         Match match = matchRepository.findById(matchDto.getId()).get();
-        match.setHomeTeamId(matchDto.getHomeTeamId());
-        match.setAwayTeamId(matchDto.getAwayTeamId());
+        match.setHomeTeam(tr.findOneById(match.getHomeTeam().getId()));
+        match.setAwayTeam(tr.findOneById(match.getAwayTeam().getId()));
         match.setHomeTeamScore(matchDto.getHomeTeamScore());
         match.setAwayTeamScore(matchDto.getAwayTeamScore());
         match.setHomeWinPayout(matchDto.getHomeWinPayout());

@@ -28,7 +28,7 @@ import com.isd.game.mapper.TeamMapperService;
 @EnableScheduling
 @Service
 @ConditionalOnProperty(name = "scheduler.enabled", matchIfMissing = true)
-public class matchSchedulerService {
+public class MatchSchedulerService {
     @Autowired
     private MatchMapperService matchMapperService;
 
