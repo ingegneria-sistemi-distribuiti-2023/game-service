@@ -4,7 +4,7 @@ import com.isd.game.dto.TeamHistoryDTO;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isd.game.dto.TeamDTO;
-import com.isd.game.mapper.TeamMapperService;
+import com.isd.game.mapper.TeamService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TeamController {
 
 	@Autowired
-	private TeamMapperService teamMapperService;
+	private TeamService teamMapperService;
 
 	// TODO: Deprecare ?
 	// default path: return a string

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.isd.game.domain.Match;
+import io.swagger.models.auth.In;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.isd.game.domain.MatchHistory;
@@ -16,14 +17,13 @@ import com.isd.game.domain.MatchHistory;
  * 
  */
 public interface MatchHistoryRepository extends JpaRepository<MatchHistory, Integer>{
-    <S extends MatchHistory> S save(S entity);
+    MatchHistory save(MatchHistory entity);
 
-    Optional<MatchHistory> findById(Integer id);
+    MatchHistory findOneById(Integer id);
 
     boolean existsById(Integer id);
 
     List<MatchHistory> findAll();
 
     List<MatchHistory> findAllByHomeTeamIdOrAwayTeamId(Integer homeId, Integer awayId);
-
 }

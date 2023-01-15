@@ -15,13 +15,9 @@ import com.isd.game.domain.Team;
  * 
  */
 public interface TeamRepository extends JpaRepository<Team, Integer>{
-    // TODO: perché non ritorna l'entity ???
-    <S extends Team> S save(S entity);
+    Team save(Team entity);
 
     Team findOneById(Integer id);
-
-    // TODO: perché non ritorna l'entity ???
-    Optional<Team> findById(Integer id);
 
     boolean existsById(Integer id);
 

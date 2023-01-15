@@ -15,11 +15,14 @@ import com.isd.game.domain.Match;
  * 
  */
 public interface MatchRepository extends JpaRepository<Match, Integer>{
-    <S extends Match> S save(S entity);
+    Match save(Match entity);
 
-    Optional<Match> findById(Integer id);
+    Match findOneById(Integer id);
 
     boolean existsById(Integer id);
 
     List<Match> findAll();
+
+    void deleteOneById(Integer id);
+
 }

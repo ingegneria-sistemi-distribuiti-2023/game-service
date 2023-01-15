@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.isd.game.converter.MatchHistoryConverter;
 import com.isd.game.domain.MatchHistory;
 import com.isd.game.dto.MatchHistoryDTO;
 import com.isd.game.dto.TeamHistoryDTO;
@@ -33,16 +34,14 @@ import com.isd.game.repository.TeamRepository;
  */
 @Service
 @Transactional
-public class TeamMapperService {
-    // @Autowired annotation is used to inject the object dependency implicitly.
-    @Autowired
-    private TeamRepository teamRepository;
+public class TeamService {
+    private final TeamRepository teamRepository;
+    private final MatchHistoryRepository matchHistoryRepository;
 
-    @Autowired
-    private MatchHistoryRepository matchHistoryRepository;
-
-    @Autowired
-    private MatchHistoryMapperService mhps;
+    public TeamService(TeamRepository teamRepository, MatchHistoryRepository matchHistoryRepository) {
+        this.teamRepository = teamRepository;
+        this.matchHistoryRepository = matchHistoryRepository;
+    }
 
     // get all the data from the database
     public List<TeamDTO> getAllData() {
@@ -65,32 +64,6 @@ public class TeamMapperService {
         return convertToDto(team);
     }
 
-    // update a record in the database
-    public TeamDTO updateTeam(TeamDTO teamDto) {
-        Team team = teamRepository.findById(teamDto.getId()).get();
-        team.setName(teamDto.getName());
-        teamRepository.save(team);
-        return convertToDto(team);
-    }
-
-    // delete a record from the database
-    public void deleteTeam(Integer id) {
-        //check if the team exists
-        if (!teamRepository.existsById(id)) {
-            throw new RuntimeException("Team with id " + id + " does not exist");
-        }
-        teamRepository.deleteById(id);
-    }
-
-    // find a record in the database
-    public TeamDTO findTeam(Integer id) {
-        //check if the team exists
-        if (!teamRepository.existsById(id)) {
-            throw new RuntimeException("Team with id " + id + " does not exist");
-        }
-        return convertToDto(teamRepository.findById(id).get());
-    }
-
     // find a record in the database
     public TeamHistoryDTO findHistoryOfTeam(Integer id) {
         //check if the team exists
@@ -99,14 +72,10 @@ public class TeamMapperService {
 
         Team team = teamRepository.findOneById(id);
 
-//      NOTA PER MARCO: conviene istanziare un oggetto e non fare in questo modo perché mi avevano spiegato che dovrebbe cambiare chiamate a livello di DB
-//        .. in questo esempio tu prima chiami l'exist e fai la query e successivamente ne fai un'altra query per trovare il team
-//        if (!teamRepository.existsById(id)) {
         if (team == null) {
             throw new RuntimeException("Team with id " + id + " does not exist");
         }
 
-        // TODO: In questo caso credo pure dovrebbe essere più performante usare teamId invece che chiamare team.getId() su toRet.setId() e mr.findAllBy..(), verificare
         Integer teamId = team.getId();
 
         toRet.setId(teamId);
@@ -115,8 +84,10 @@ public class TeamMapperService {
         List<MatchHistory> list = matchHistoryRepository.findAllByHomeTeamIdOrAwayTeamId(teamId, teamId);
         List<MatchHistoryDTO> listDto = new ArrayList<>();
 
+        MatchHistoryConverter cnv = new MatchHistoryConverter();
+
         for (MatchHistory m : list){
-            listDto.add(mhps.convertToDto(m));
+            listDto.add(cnv.convertToDto(m));
         }
 
         toRet.setPlayedGames(listDto);

@@ -28,7 +28,6 @@ public class Match {
     @JoinColumn(name = "away_team", nullable = false)
     private Team awayTeam;
 
-
     @Column(name = "home_score")
     private Integer homeTeamScore;
 

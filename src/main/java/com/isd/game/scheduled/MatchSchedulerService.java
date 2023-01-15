@@ -4,6 +4,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.isd.game.converter.MatchHistoryConverter;
+import com.isd.game.domain.MatchHistory;
+import com.isd.game.dto.MatchHistoryDTO;
+import com.isd.game.repository.MatchHistoryRepository;
+import com.isd.game.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -13,9 +18,9 @@ import org.springframework.stereotype.Service;
 import com.isd.game.commons.MatchStatus;
 import com.isd.game.dto.MatchDTO;
 import com.isd.game.dto.TeamDTO;
-import com.isd.game.mapper.MatchHistoryMapperService;
-import com.isd.game.mapper.MatchMapperService;
-import com.isd.game.mapper.TeamMapperService;
+import com.isd.game.mapper.MatchHistoryService;
+import com.isd.game.mapper.MatchService;
+import com.isd.game.mapper.TeamService;
 
 
 /*
@@ -30,13 +35,19 @@ import com.isd.game.mapper.TeamMapperService;
 @ConditionalOnProperty(name = "scheduler.enabled", matchIfMissing = true)
 public class MatchSchedulerService {
     @Autowired
-    private MatchMapperService matchMapperService;
+    private MatchService matchMapperService;
 
     @Autowired
-    private TeamMapperService teamMapperService;
+    private TeamService teamMapperService;
 
     @Autowired
-    private MatchHistoryMapperService matchHistoryMapperService;
+    private MatchHistoryService matchHistoryMapperService;
+
+    @Autowired
+    private MatchHistoryRepository mhr;
+
+    @Autowired
+    private MatchRepository mr;
 
     /**
      * every 10 seconds, fetch two teams that are not in a match that ended and create a new match between them.
@@ -108,8 +119,15 @@ public class MatchSchedulerService {
                 // update the status of the match
                 match.setStatus(MatchStatus.FINISHED);
 
-                // add the match to the history
-                matchHistoryMapperService.createNewMatch(match);
+                MatchHistoryConverter cnv = new MatchHistoryConverter();
+
+                MatchHistoryDTO matchHistoryDto = cnv.fromMatchDtoToMatchHistory(match);
+
+                MatchHistory matchHistoryEntity = cnv.toEntity(matchHistoryDto);
+
+                mhr.save(matchHistoryEntity);
+
+                mr.deleteOneById(match.getId());
 
                 // delete the match from the current matches
                 matchMapperService.deleteMatch(match.getId());

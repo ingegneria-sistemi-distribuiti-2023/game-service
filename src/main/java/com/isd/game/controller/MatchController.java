@@ -3,7 +3,7 @@ package com.isd.game.controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.isd.game.dto.MatchDTO;
-import com.isd.game.mapper.MatchMapperService;
+import com.isd.game.mapper.MatchService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @RequestMapping("/match")
 public class MatchController {
 	@Autowired
-	private MatchMapperService matchMapperService;
+	private MatchService matchMapperService;
 
 	// return all the matches
 	@RequestMapping(path = "/", method = RequestMethod.GET)

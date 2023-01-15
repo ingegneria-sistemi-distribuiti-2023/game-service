@@ -21,14 +21,14 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.isd.game.controller.TeamController;
 import com.isd.game.dto.TeamDTO;
-import com.isd.game.mapper.TeamMapperService;
+import com.isd.game.mapper.TeamService;
 
 // narrow down the tests to just the web layer, 
 // using @WebMvcTest to test the TeamController
 @WebMvcTest(TeamController.class) 
 public class TeamTests {
     @MockBean
-	TeamMapperService teamMapperService;
+    TeamService teamMapperService;
 
 	@Autowired
 	private MockMvc mockMvc;
