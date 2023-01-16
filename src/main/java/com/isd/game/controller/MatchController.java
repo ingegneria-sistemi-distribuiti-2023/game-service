@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @Controller is a specialization of Component that allows for implementation classes to be autodetected through classpath scanning
  */
 @RestController()// @Controller + @ResponseBody
-@RequestMapping("/match")
+@RequestMapping("/game/match")
 public class MatchController {
 	@Autowired
 	private MatchService matchMapperService;
