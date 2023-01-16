@@ -6,11 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/*
- * this class represents an Entity (or domain object) in the application
- * it is a Java representation of a database table
- */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "team")
 public class Team {
@@ -21,31 +23,4 @@ public class Team {
 
     private String name;
 
-    public Team() {
-    }
-
-    public Team(String name) {
-        this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Team [name=" + name + ", id=" + id + "]";
-    }
 }

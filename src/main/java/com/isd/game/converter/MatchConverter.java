@@ -10,6 +10,26 @@ public class MatchConverter {
     @Autowired
     TeamRepository teamRepository;
 
+    // convert the data from the database to a DTO
+    public MatchDTO toDto(Match match) {
+        MatchDTO matchDto = new MatchDTO();
+        matchDto.setId(match.getId());
+        matchDto.setHomeTeamId(match.getHomeTeam().getId());
+        matchDto.setAwayTeamId(match.getAwayTeam().getId());
+        matchDto.setHomeTeamName(match.getHomeTeam().getName());
+        matchDto.setAwayTeamName(match.getAwayTeam().getName());
+        matchDto.setHomeTeamScore(match.getHomeTeamScore());
+        matchDto.setAwayTeamScore(match.getAwayTeamScore());
+        matchDto.setHomeWinPayout(match.getHomeWinPayout());
+        matchDto.setAwayWinPayout(match.getAwayWinPayout());
+        matchDto.setDrawPayout(match.getDrawPayout());
+        matchDto.setInGameMinute(match.getInGameMinute());
+        matchDto.setStartTime(match.getStartTime());
+        matchDto.setEndTime(match.getEndTime());
+        matchDto.setStatus(match.getStatus());
+        return matchDto;
+    }
+
     public Match toEntity(MatchDTO dto) {
         Match match = new Match();
         match.setId(dto.getId());

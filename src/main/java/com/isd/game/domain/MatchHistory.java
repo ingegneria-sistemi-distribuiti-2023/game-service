@@ -12,11 +12,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/*
- * this class represents an Entity (or domain object) in the application
- * it is a Java representation of a database table
- */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "match_history")
 public class MatchHistory {
@@ -50,87 +52,4 @@ public class MatchHistory {
     @Enumerated(EnumType.STRING)
     private MatchStatus status;
 
-    public MatchHistory() {
-    }
-
-    public MatchHistory(Integer homeTeamId, Integer awayTeamId, Integer homeTeamScore, Integer awayTeamScore, Date startTime, Date endTime, MatchStatus status) {
-        this.homeTeamId = homeTeamId;
-        this.awayTeamId = awayTeamId;
-        this.homeTeamScore = homeTeamScore;
-        this.awayTeamScore = awayTeamScore;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.status = status;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getHomeTeamId() {
-        return homeTeamId;
-    }
-
-    public void setHomeTeamId(Integer homeTeamId) {
-        this.homeTeamId = homeTeamId;
-    }
-
-    public Integer getAwayTeamId() {
-        return awayTeamId;
-    }
-
-    public void setAwayTeamId(Integer awayTeamId) {
-        this.awayTeamId = awayTeamId;
-    }
-
-    public Integer getHomeTeamScore() {
-        return homeTeamScore;
-    }
-
-    public void setHomeTeamScore(Integer homeTeamScore) {
-        this.homeTeamScore = homeTeamScore;
-    }
-
-    public Integer getAwayTeamScore() {
-        return awayTeamScore;
-    }
-
-    public void setAwayTeamScore(Integer awayTeamScore) {
-        this.awayTeamScore = awayTeamScore;
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
-    public MatchStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(MatchStatus status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "Match [awayTeamId=" + awayTeamId + ", awayTeamScore=" + awayTeamScore + ", endTime=" + endTime
-                + ", homeTeamId=" + homeTeamId + ", homeTeamScore=" + homeTeamScore + ", id=" + id + ", startTime="
-                + startTime + ", status=" + status +"]";
-    }
 }

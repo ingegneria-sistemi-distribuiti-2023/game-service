@@ -37,13 +37,6 @@ public class TeamController {
 	@Autowired
 	private TeamService teamMapperService;
 
-	// TODO: Deprecare ?
-	// default path: return a string
-//	@RequestMapping(path = "/team_test", method = RequestMethod.GET)
-//	public String index() {
-//		return "TeamController";
-//	}
-
 	// return list of all games
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public @ResponseBody Iterable<TeamDTO> teams() {
@@ -64,10 +57,4 @@ public class TeamController {
 		return teamMapperService.createNewRecord(teamName);
 	}
 
-	// create a new team given a name
-//	TODO: Must add 'enabled' field before
-//	@RequestMapping(path = "/team/disable", method = RequestMethod.POST)
-//	public @ResponseBody TeamDto disable(@RequestBody Integer teamId) {
-//		return teamMapperService.createNewRecord(teamDto);
-//	}
 }

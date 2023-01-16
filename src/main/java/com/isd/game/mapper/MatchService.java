@@ -1,8 +1,10 @@
 package com.isd.game.mapper;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.isd.game.converter.MatchConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,27 +42,15 @@ public class MatchService {
 
     // get all the data from the database
     public List<MatchDTO> getAllData() {
-        return matchRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
-    }
 
-    // convert the data from the database to a DTO
-    public MatchDTO convertToDto(Match match) {
-        MatchDTO matchDto = new MatchDTO();
-        matchDto.setId(match.getId());
-        matchDto.setHomeTeamId(match.getHomeTeam().getId());
-        matchDto.setAwayTeamId(match.getAwayTeam().getId());
-        matchDto.setHomeTeamName(match.getHomeTeam().getName());
-        matchDto.setAwayTeamName(match.getAwayTeam().getName());
-        matchDto.setHomeTeamScore(match.getHomeTeamScore());
-        matchDto.setAwayTeamScore(match.getAwayTeamScore());
-        matchDto.setHomeWinPayout(match.getHomeWinPayout());
-        matchDto.setAwayWinPayout(match.getAwayWinPayout());
-        matchDto.setDrawPayout(match.getDrawPayout());
-        matchDto.setInGameMinute(match.getInGameMinute());
-        matchDto.setStartTime(match.getStartTime());
-        matchDto.setEndTime(match.getEndTime());
-        matchDto.setStatus(match.getStatus());
-        return matchDto;
+        List<MatchDTO> list = new LinkedList<>();
+        List<Match> listEntity = matchRepository.findAll();
+
+        for (Match m: listEntity){
+            list.add(new MatchConverter().toDto(m));
+        }
+
+        return list;
     }
 
     // create a new record in the database
@@ -80,7 +70,7 @@ public class MatchService {
         match.setEndTime(matchDto.getEndTime());
         match.setStatus(matchDto.getStatus());
         matchRepository.save(match);
-        return convertToDto(match);
+        return new MatchConverter().toDto(match);
     }
 
     // update a record in the database
@@ -98,7 +88,7 @@ public class MatchService {
         match.setEndTime(matchDto.getEndTime());
         match.setStatus(matchDto.getStatus());
         matchRepository.save(match);
-        return convertToDto(match);
+        return new MatchConverter().toDto(match);
     }
 
     // delete a record from the database
@@ -116,6 +106,7 @@ public class MatchService {
         if (!matchRepository.existsById(id)) {
             throw new RuntimeException("Match with id " + id + " does not exist");
         }
-        return convertToDto(matchRepository.findOneById(id));
+        // TODO: aggiungi controllo per gestire anche MatchHistory!
+        return new MatchConverter().toDto(matchRepository.findOneById(id));
     }
 }

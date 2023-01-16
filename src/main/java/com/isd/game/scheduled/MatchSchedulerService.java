@@ -9,6 +9,8 @@ import com.isd.game.domain.MatchHistory;
 import com.isd.game.dto.MatchHistoryDTO;
 import com.isd.game.repository.MatchHistoryRepository;
 import com.isd.game.repository.MatchRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -21,6 +23,7 @@ import com.isd.game.dto.TeamDTO;
 import com.isd.game.mapper.MatchHistoryService;
 import com.isd.game.mapper.MatchService;
 import com.isd.game.mapper.TeamService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /*
@@ -33,21 +36,21 @@ import com.isd.game.mapper.TeamService;
 @EnableScheduling
 @Service
 @ConditionalOnProperty(name = "scheduler.enabled", matchIfMissing = true)
+@Transactional
 public class MatchSchedulerService {
-    @Autowired
-    private MatchService matchMapperService;
+    private final MatchService matchService;
+    private final TeamService teamService;
+    private final MatchHistoryRepository mhr;
+    private final MatchRepository mr;
 
-    @Autowired
-    private TeamService teamMapperService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MatchSchedulerService.class);
 
-    @Autowired
-    private MatchHistoryService matchHistoryMapperService;
-
-    @Autowired
-    private MatchHistoryRepository mhr;
-
-    @Autowired
-    private MatchRepository mr;
+    public MatchSchedulerService(MatchService matchService, TeamService teamService, MatchHistoryRepository mhr, MatchRepository mr) {
+        this.matchService = matchService;
+        this.teamService = teamService;
+        this.mhr = mhr;
+        this.mr = mr;
+    }
 
     /**
      * every 10 seconds, fetch two teams that are not in a match that ended and create a new match between them.
@@ -55,9 +58,9 @@ public class MatchSchedulerService {
     @Scheduled(fixedRate = 10000)
     public void createMatch() {
         // fetch all teams from database
-        List<TeamDTO> teams = teamMapperService.getAllData();
+        List<TeamDTO> teams = teamService.getAllData();
         // fetch all matches from database
-        List<MatchDTO> matches = matchMapperService.getAllData();
+        List<MatchDTO> matches = matchService.getAllData();
         // find two teams that are not in a match that ended
         TeamDTO homeTeam = null;
         TeamDTO awayTeam = null;
@@ -96,7 +99,7 @@ public class MatchSchedulerService {
             match.setAwayWinPayout(1 + (Math.random() * 2));
             match.setStatus(MatchStatus.TO_BE_PLAYED);
             match.setInGameMinute(0);
-            matchMapperService.createNewMatch(match);
+            matchService.createNewMatch(match);
         }
     }
 
@@ -107,7 +110,7 @@ public class MatchSchedulerService {
     @Scheduled(fixedRate = 20000)
     public void updateMatchScore() {
         // fetch all matches from database
-        List<MatchDTO> matches = matchMapperService.getAllData();
+        List<MatchDTO> matches = matchService.getAllData();
         // update the score of each match
         matches.forEach(match -> {
             // if the match started more than 10 minutes ago, do not update the score
@@ -127,10 +130,8 @@ public class MatchSchedulerService {
 
                 mhr.save(matchHistoryEntity);
 
-                mr.deleteOneById(match.getId());
-
                 // delete the match from the current matches
-                matchMapperService.deleteMatch(match.getId());
+                matchService.deleteMatch(match.getId());
 
             } else if (((matchStartTime.compareTo(currentTime) <= 0)) && !(match.getStatus().equals(MatchStatus.FINISHED))) {
                 // generate a random number between 0 and 1
@@ -160,11 +161,9 @@ public class MatchSchedulerService {
                 long matchDuration = Math.abs(matchStartTimeStamp - matchEndTimeStamp);
                 long matchDurationInSeconds = TimeUnit.MILLISECONDS.toSeconds(matchDuration);
                 match.setInGameMinute((int) (matchDurationInSeconds * (90 ) / (10 * 60)));
-                // TODO: delete this
-                System.out.println("match updated");
-                System.out.println(match);
+                LOGGER.info("Updated: " + match);
                 // save the match to the database
-                matchMapperService.updateMatch(match);
+                matchService.updateMatch(match);
             }
         });
     }
@@ -175,12 +174,12 @@ public class MatchSchedulerService {
     @Scheduled(fixedRate = 600000)
     public void deleteMatch() {
         // fetch all matches from database
-        List<MatchDTO> matches = matchMapperService.getAllData();
+        List<MatchDTO> matches = matchService.getAllData();
         matches.forEach(match -> {
             long matchStartTimeStamp = match.getStartTime().getTime();
             long matchEndTimeStamp = new Date().getTime();
             if ((Math.abs(matchStartTimeStamp - matchEndTimeStamp) > TimeUnit.MINUTES.toMillis(50))) {
-                matchMapperService.deleteMatch(match.getId());
+                matchService.deleteMatch(match.getId());
             }
         });
     }

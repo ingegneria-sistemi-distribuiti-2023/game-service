@@ -1,11 +1,16 @@
 package com.isd.game.mapper;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.isd.game.converter.MatchConverter;
 import com.isd.game.converter.MatchHistoryConverter;
+import com.isd.game.converter.TeamConverter;
+import com.isd.game.domain.Match;
 import com.isd.game.domain.MatchHistory;
+import com.isd.game.dto.MatchDTO;
 import com.isd.game.dto.MatchHistoryDTO;
 import com.isd.game.dto.TeamHistoryDTO;
 import com.isd.game.repository.MatchHistoryRepository;
@@ -45,23 +50,23 @@ public class TeamService {
 
     // get all the data from the database
     public List<TeamDTO> getAllData() {
-        return teamRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+        List<TeamDTO> list = new LinkedList<>();
+        List<Team> listEntity = teamRepository.findAll();
+
+        for (Team t: listEntity){
+            list.add(new TeamConverter().toDto(t));
+        }
+
+        return list;
     }
 
-    // convert the data from the database to a DTO
-    public TeamDTO convertToDto(Team team) {
-        TeamDTO teamDto = new TeamDTO();
-        teamDto.setId(team.getId());
-        teamDto.setName(team.getName());
-        return teamDto;
-    }
 
     // create a new record in the database
     public TeamDTO createNewRecord(String newTeam) {
         Team team = new Team();
         team.setName(newTeam);
         teamRepository.save(team);
-        return convertToDto(team);
+        return new TeamConverter().toDto(team);
     }
 
     // find a record in the database
@@ -92,7 +97,6 @@ public class TeamService {
 
         toRet.setPlayedGames(listDto);
 
-//        return convertToDto(teamRepository.findById(id).get());
         return toRet;
 
     }

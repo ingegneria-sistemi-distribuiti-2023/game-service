@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.isd.game.domain.Match;
+import org.springframework.stereotype.Repository;
+
 /*
  * jpa repository is a Spring Data JPA interface that provides CRUD operations
  * for the entity class that is being managed.
@@ -14,6 +16,7 @@ import com.isd.game.domain.Match;
  * 2. the type of the entity’s identifier
  * 
  */
+@Repository
 public interface MatchRepository extends JpaRepository<Match, Integer>{
     Match save(Match entity);
 
