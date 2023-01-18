@@ -20,6 +20,7 @@ services:
       - game-db-network
     volumes:
       - maven_packages:/root/.m2
+    container_name: game-service
 
 
 networks: 
