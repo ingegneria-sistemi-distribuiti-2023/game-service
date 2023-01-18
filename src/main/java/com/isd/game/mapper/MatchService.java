@@ -2,10 +2,12 @@ package com.isd.game.mapper;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import com.isd.game.commons.error.CustomHttpResponse;
+import com.isd.game.commons.error.CustomServiceException;
 import com.isd.game.converter.MatchConverter;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,21 +94,21 @@ public class MatchService {
     }
 
     // delete a record from the database
-    public void deleteMatch(Integer id) {
+    public void deleteMatch(Integer id) throws CustomServiceException {
         //check if the match exists
         if (!matchRepository.existsById(id)) {
-            throw new RuntimeException("Match with id " + id + " does not exist");
+            throw new CustomServiceException(new CustomHttpResponse(HttpStatus.NOT_FOUND, "Match with id " + id + " does not exist"));
         }
         matchRepository.deleteById(id);
     }
 
     // find a record in the database
-    public MatchDTO findMatch(Integer id) {
+    public MatchDTO findMatch(Integer id) throws CustomServiceException {
         //check if the match exists
         if (!matchRepository.existsById(id)) {
-            throw new RuntimeException("Match with id " + id + " does not exist");
+            throw new CustomServiceException(new CustomHttpResponse(HttpStatus.NOT_FOUND, "Match with id " + id + " does not exist"));
         }
         // TODO: aggiungi controllo per gestire anche MatchHistory!
-        return new MatchConverter().toDto(matchRepository.findOneById(id));
+        return  new MatchConverter().toDto(matchRepository.findOneById(id));
     }
 }

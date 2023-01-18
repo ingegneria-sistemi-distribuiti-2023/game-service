@@ -2,8 +2,13 @@ package com.isd.game.dto;
 
 import java.util.Date;
 
+import org.springframework.http.HttpStatus;
+
 import com.isd.game.commons.MatchStatus;
 import com.isd.game.commons.OutcomeEnum;
+import com.isd.game.commons.error.CustomHttpResponse;
+import com.isd.game.commons.error.CustomServiceException;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +35,7 @@ public class MatchDTO {
     private Date endTime;
     private MatchStatus status;
 
-    public Double getPayout(OutcomeEnum outcome){
+    public Double getPayout(OutcomeEnum outcome) throws CustomServiceException{
         switch (outcome) {
             case DRAW:
                 return getDrawPayout();
@@ -39,7 +44,7 @@ public class MatchDTO {
             case HOME:
                 return getHomeWinPayout();
             default:
-                throw new IllegalArgumentException("Invalid outcome: " + outcome);
+                throw new CustomServiceException(new CustomHttpResponse(HttpStatus.BAD_REQUEST, "Invalid bet Id"));
         }
     }
 

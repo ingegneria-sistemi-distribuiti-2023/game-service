@@ -11,16 +11,15 @@ import com.isd.game.repository.MatchHistoryRepository;
 import com.isd.game.repository.MatchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.isd.game.commons.MatchStatus;
+import com.isd.game.commons.error.CustomServiceException;
 import com.isd.game.dto.MatchDTO;
 import com.isd.game.dto.TeamDTO;
-import com.isd.game.mapper.MatchHistoryService;
 import com.isd.game.mapper.MatchService;
 import com.isd.game.mapper.TeamService;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,7 +107,7 @@ public class MatchSchedulerService {
      * by randomly adding a gol to one of the teams if the match started not more than 10 minutes ago
      */
     @Scheduled(fixedRate = 20000)
-    public void updateMatchScore() {
+    public void updateMatchScore() throws CustomServiceException {
         // fetch all matches from database
         List<MatchDTO> matches = matchService.getAllData();
         // update the score of each match
@@ -131,7 +130,11 @@ public class MatchSchedulerService {
                 mhr.save(matchHistoryEntity);
 
                 // delete the match from the current matches
-                matchService.deleteMatch(match.getId());
+                try {
+                    matchService.deleteMatch(match.getId());
+                } catch (CustomServiceException e) {
+                    e.printStackTrace();
+                }
 
             } else if (((matchStartTime.compareTo(currentTime) <= 0)) && !(match.getStatus().equals(MatchStatus.FINISHED))) {
                 // generate a random number between 0 and 1
@@ -172,14 +175,18 @@ public class MatchSchedulerService {
      *  Check every 10 minutes: delete a match from the database if it ended more than 50 minutes ago
      */
     @Scheduled(fixedRate = 600000)
-    public void deleteMatch() {
+    public void deleteMatch() throws CustomServiceException {
         // fetch all matches from database
         List<MatchDTO> matches = matchService.getAllData();
         matches.forEach(match -> {
             long matchStartTimeStamp = match.getStartTime().getTime();
             long matchEndTimeStamp = new Date().getTime();
             if ((Math.abs(matchStartTimeStamp - matchEndTimeStamp) > TimeUnit.MINUTES.toMillis(50))) {
-                matchService.deleteMatch(match.getId());
+                try {
+                    matchService.deleteMatch(match.getId());
+                } catch (CustomServiceException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

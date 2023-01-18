@@ -2,6 +2,7 @@ package com.isd.game.controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.isd.game.commons.error.CustomServiceException;
 import com.isd.game.dto.MatchDTO;
 import com.isd.game.mapper.MatchService;
 
@@ -28,17 +29,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 @RequestMapping("/game/match")
 public class MatchController {
 	@Autowired
-	private MatchService matchMapperService;
+	private MatchService matchService;
 
 	// return all the matches
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public @ResponseBody Iterable<MatchDTO> all() {
-		return matchMapperService.getAllData();
+		return matchService.getAllData();
 	}
 
 	// return a match by id
 	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody MatchDTO id(@PathVariable("id") Integer id) {
-		return matchMapperService.findMatch(id);
+	public @ResponseBody MatchDTO id(@PathVariable("id") Integer id) throws CustomServiceException {
+		return matchService.findMatch(id);
 	}
 }

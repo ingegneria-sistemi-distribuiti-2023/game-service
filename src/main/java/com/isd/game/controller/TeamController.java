@@ -3,6 +3,7 @@ package com.isd.game.controller;
 import com.isd.game.dto.TeamHistoryDTO;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isd.game.commons.error.CustomServiceException;
 import com.isd.game.dto.TeamDTO;
 import com.isd.game.mapper.TeamService;
 
@@ -44,7 +45,7 @@ public class TeamController {
 	}
 
 	@RequestMapping(path = "/team/{id}", method = RequestMethod.GET)
-	public @ResponseBody TeamHistoryDTO team(@PathVariable("id") Integer id) {
+	public @ResponseBody TeamHistoryDTO team(@PathVariable("id") Integer id) throws CustomServiceException {
 		return teamMapperService.findHistoryOfTeam(id);
 	}
 
