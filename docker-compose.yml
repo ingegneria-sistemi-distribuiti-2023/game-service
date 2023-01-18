@@ -2,9 +2,10 @@ version: '3.3'
 
 services:
   game-service:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: khalld/game-service:latest
     # depends_on:
     #   match_db:
     #     condition: service_healthy
