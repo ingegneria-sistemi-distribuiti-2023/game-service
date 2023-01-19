@@ -46,6 +46,27 @@ public class MatchControllerTests {
 	private MockMvc mockMvc;
 
 	@Test
+    public void matchAllShouldReturnUnautorizedErrorWhenCalledWithoutSecretKey() throws Exception {
+		
+        // mock performs a GET request to the /team/all endpoint without the secret key
+		// and check if the response status is 401 (UNAUTHORIZED)
+		this.mockMvc.perform(get("/game/match")).andDo(print())
+        .andExpect(status().isUnauthorized())
+        .andReturn();
+	}
+
+	//
+	@Test
+	public void matchAllShouldReturnUnautorizedErrorWhenCalledWithWrongSecretKey() throws Exception {
+		
+		// mock performs a GET request to the /team/all endpoint with the wrong secret key
+		// and check if the response status is 401 (UNAUTHORIZED)
+		this.mockMvc.perform(get("/game/match").header("Secret-Key", "wrong secret key")).andDo(print())
+		.andExpect(status().isUnauthorized())
+		.andReturn();
+	}
+
+	@Test
 	public void matchAllShouldReturnAListOfMatchFromService() throws Exception {
 		// TODO: cambiare, non usare il service ma il repository
 		// mock the service to return a list of DTOs
@@ -75,27 +96,6 @@ public class MatchControllerTests {
 		}
 	}
 	//
-
-	@Test
-    public void matchAllShouldReturnUnautorizedErrorWhenCalledWithoutSecretKey() throws Exception {
-		
-        // mock performs a GET request to the /team/all endpoint without the secret key
-		// and check if the response status is 401 (UNAUTHORIZED)
-		this.mockMvc.perform(get("/game/match")).andDo(print())
-        .andExpect(status().isUnauthorized())
-        .andReturn();
-	}
-
-	//
-	@Test
-	public void matchAllShouldReturnUnautorizedErrorWhenCalledWithWrongSecretKey() throws Exception {
-		
-		// mock performs a GET request to the /team/all endpoint with the wrong secret key
-		// and check if the response status is 401 (UNAUTHORIZED)
-		this.mockMvc.perform(get("/game/match").header("Secret-Key", "wrong secret key")).andDo(print())
-		.andExpect(status().isUnauthorized())
-		.andReturn();
-	}
 
 	// /game/match/{id} should return a single team from the service by id
     @Test

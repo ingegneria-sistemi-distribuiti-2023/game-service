@@ -39,6 +39,22 @@ public class TeamControllerTests {
     private String SECRET_SERVICE_KEY;
 
     @Test
+    public void teamAllShouldReturnUnautorizedErrorWhenCalledWithoutSecretKey() throws Exception {	
+        // mock performs a GET request to the /team/all endpoint without the secret key
+		// and check if the response status is 401 (UNAUTHORIZED)
+		this.mockMvc.perform(get("/game/")).andDo(print())
+        .andExpect(status().isUnauthorized())
+        .andReturn();
+	}
+
+    @Test
+    public void teamAllShouldReturnUnautorizedErrorWhenCalledWithWrongSecretKey() throws Exception {
+        this.mockMvc.perform(get("/game/").header("Secret-Key", "wrong-secret-key")).andDo(print())
+        .andExpect(status().isUnauthorized())
+        .andReturn();
+    }
+
+    @Test
 	public void teamAllShouldReturnAListOfTeamsFromService() throws Exception {
 		// TODO: cambiare, non usare il service ma il repository
 
@@ -68,20 +84,4 @@ public class TeamControllerTests {
             assertEquals(teamDtos[i], teamService.getAllData().get(i));
         }
 	}
-
-    @Test
-    public void teamAllShouldReturnUnautorizedErrorWhenCalledWithoutSecretKey() throws Exception {	
-        // mock performs a GET request to the /team/all endpoint without the secret key
-		// and check if the response status is 401 (UNAUTHORIZED)
-		this.mockMvc.perform(get("/game/")).andDo(print())
-        .andExpect(status().isUnauthorized())
-        .andReturn();
-	}
-
-    @Test
-    public void teamAllShouldReturnUnautorizedErrorWhenCalledWithWrongSecretKey() throws Exception {
-        this.mockMvc.perform(get("/game/").header("Secret-Key", "wrong-secret-key")).andDo(print())
-        .andExpect(status().isUnauthorized())
-        .andReturn();
-    }
 }
