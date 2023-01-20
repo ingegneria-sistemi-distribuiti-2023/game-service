@@ -16,9 +16,8 @@ import java.io.IOException;
 
 @Component
 public class ApiPathFilter extends OncePerRequestFilter {
-//    @Value("${app.service.secret}")
-    // TODO:
-    private String SECRET_APP = "paperino";
+    @Value("${app.service.secret}")
+    private String SECRET_APP;
     private final static String SECRET_HEADER = "Secret-Key";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiPathFilter.class);
@@ -30,9 +29,14 @@ public class ApiPathFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String secretFromApp = request.getHeader(SECRET_HEADER);
+        String path = request.getServletPath();
 
-        LOGGER.info(secretFromApp);
+        if (path.startsWith("/app/public") || path.contains("swagger") || path.equals("/v3/api-docs")  || path.equals("/favicon.ico")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String secretFromApp = request.getHeader(SECRET_HEADER);
 
         if (!SECRET_APP.equals(secretFromApp)){
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
