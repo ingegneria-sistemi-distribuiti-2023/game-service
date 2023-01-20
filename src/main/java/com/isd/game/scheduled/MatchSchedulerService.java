@@ -11,6 +11,7 @@ import com.isd.game.repository.MatchHistoryRepository;
 import com.isd.game.repository.MatchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -41,6 +42,8 @@ public class MatchSchedulerService {
     private final TeamService teamService;
     private final MatchHistoryRepository mhr;
     private final MatchRepository mr;
+    @Autowired
+    MatchHistoryConverter cnv;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MatchSchedulerService.class);
 
@@ -120,8 +123,6 @@ public class MatchSchedulerService {
                 match.setEndTime(new Date(matchStartTime.getTime() + TimeUnit.MINUTES.toMillis(10)));
                 // update the status of the match
                 match.setStatus(MatchStatus.FINISHED);
-
-                MatchHistoryConverter cnv = new MatchHistoryConverter();
 
                 MatchHistoryDTO matchHistoryDto = cnv.fromMatchDtoToMatchHistory(match);
 

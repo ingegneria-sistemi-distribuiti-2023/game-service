@@ -13,6 +13,7 @@ import com.isd.game.dto.MatchHistoryDTO;
 import com.isd.game.dto.TeamHistoryDTO;
 import com.isd.game.repository.MatchHistoryRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,8 @@ import com.isd.game.repository.TeamRepository;
 public class TeamService {
     private final TeamRepository teamRepository;
     private final MatchHistoryRepository matchHistoryRepository;
+    @Autowired
+    MatchHistoryConverter cnv;
 
     public TeamService(TeamRepository teamRepository, MatchHistoryRepository matchHistoryRepository) {
         this.teamRepository = teamRepository;
@@ -87,8 +90,6 @@ public class TeamService {
 
         List<MatchHistory> list = matchHistoryRepository.findAllByHomeTeamIdOrAwayTeamId(teamId, teamId);
         List<MatchHistoryDTO> listDto = new ArrayList<>();
-
-        MatchHistoryConverter cnv = new MatchHistoryConverter();
 
         for (MatchHistory m : list){
             listDto.add(cnv.convertToDto(m));

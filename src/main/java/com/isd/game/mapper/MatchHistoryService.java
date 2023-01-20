@@ -34,6 +34,9 @@ import com.isd.game.repository.TeamRepository;
 @Transactional
 public class MatchHistoryService {
     private final MatchHistoryRepository matchHistoryRepository;
+    
+    @Autowired
+    MatchHistoryConverter cnv;
 
     public MatchHistoryService(MatchHistoryRepository matchHistoryRepository) {
         this.matchHistoryRepository = matchHistoryRepository;
@@ -42,8 +45,6 @@ public class MatchHistoryService {
     // get all the data from the database
     public List<MatchHistoryDTO> getAllData() {
         List<MatchHistoryDTO> dtos = new LinkedList<>();
-
-        MatchHistoryConverter cnv = new MatchHistoryConverter();
 
         for (MatchHistory mh : matchHistoryRepository.findAll()) {
             dtos.add(cnv.convertToDto(mh));
