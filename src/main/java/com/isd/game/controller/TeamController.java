@@ -10,6 +10,7 @@ import com.isd.game.mapper.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,12 +41,12 @@ public class TeamController {
 
 	// return list of all games
 	@RequestMapping(path = "/", method = RequestMethod.GET)
-	public @ResponseBody Iterable<TeamDTO> teams() {
+	public @ResponseBody Iterable<TeamDTO> teams(@RequestHeader("Secret-Key") String secretKey) {
 		return teamMapperService.getAllData();
 	}
 
 	@RequestMapping(path = "/team/{id}", method = RequestMethod.GET)
-	public @ResponseBody TeamHistoryDTO team(@PathVariable("id") Integer id) throws CustomServiceException {
+	public @ResponseBody TeamHistoryDTO team(@PathVariable("id") Integer id, @RequestHeader("Secret-Key") String secretKey) throws CustomServiceException {
 		return teamMapperService.findHistoryOfTeam(id);
 	}
 
@@ -54,7 +55,7 @@ public class TeamController {
 	// create a new team given a name
 	@RequestMapping(path = "/team/", method = RequestMethod.POST)
 	public @ResponseBody
-    TeamDTO create(@RequestBody String teamName) {
+    TeamDTO create(@RequestBody String teamName, @RequestHeader("Secret-Key") String secretKey) {
 		return teamMapperService.createNewRecord(teamName);
 	}
 

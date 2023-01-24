@@ -1,10 +1,6 @@
 package com.isd.game.repository;
 
 import java.util.List;
-import java.util.Optional;
-
-import com.isd.game.domain.Match;
-import io.swagger.models.auth.In;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.isd.game.domain.MatchHistory;

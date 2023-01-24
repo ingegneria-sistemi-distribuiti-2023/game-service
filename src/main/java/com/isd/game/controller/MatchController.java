@@ -33,13 +33,13 @@ public class MatchController {
 
 	// return all the matches
 	@RequestMapping(path = "/", method = RequestMethod.GET)
-	public @ResponseBody Iterable<MatchDTO> all() {
+	public @ResponseBody Iterable<MatchDTO> all(@RequestHeader("Secret-Key") String secretKey) {
 		return matchService.getAllData();
 	}
 
 	// return a match by id
 	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody MatchDTO id(@PathVariable("id") Integer id) throws CustomServiceException {
+	public @ResponseBody MatchDTO id(@PathVariable("id") Integer id, @RequestHeader("Secret-Key") String secretKey) throws CustomServiceException {
 		return matchService.findMatch(id);
 	}
 }
