@@ -1,6 +1,9 @@
 package com.isd.game.controller;
 
 import com.isd.game.dto.TeamHistoryDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isd.game.commons.error.CustomServiceException;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 
 /**
@@ -34,20 +39,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @RestController()// @Controller + @ResponseBody
 @RequestMapping("/game")
+@RequiredArgsConstructor
 public class TeamController {
-
-	@Autowired
-	private TeamService teamMapperService;
+	private final TeamService teamService;
 
 	// return list of all games
 	@RequestMapping(path = "/", method = RequestMethod.GET)
-	public @ResponseBody Iterable<TeamDTO> teams(@RequestHeader("Secret-Key") String secretKey) {
-		return teamMapperService.getAllData();
+	public @ResponseBody
+	ResponseEntity<List<TeamDTO>> teams(@RequestHeader("Secret-Key") String secretKey) {
+		return new ResponseEntity<>(teamService.getAllData(), HttpStatus.OK);
 	}
 
 	@RequestMapping(path = "/team/{id}", method = RequestMethod.GET)
-	public @ResponseBody TeamHistoryDTO team(@PathVariable("id") Integer id, @RequestHeader("Secret-Key") String secretKey) throws CustomServiceException {
-		return teamMapperService.findHistoryOfTeam(id);
+	public @ResponseBody ResponseEntity<TeamHistoryDTO> team(@PathVariable("id") Integer id, @RequestHeader("Secret-Key") String secretKey) throws CustomServiceException {
+		return new ResponseEntity<>(teamService.findHistoryOfTeam(id), HttpStatus.OK);
 	}
 
 	// Theese APIs must be private or protected by role
@@ -55,8 +60,8 @@ public class TeamController {
 	// create a new team given a name
 	@RequestMapping(path = "/team/", method = RequestMethod.POST)
 	public @ResponseBody
-    TeamDTO create(@RequestBody String teamName, @RequestHeader("Secret-Key") String secretKey) {
-		return teamMapperService.createNewRecord(teamName);
+    ResponseEntity<TeamDTO> create(@RequestBody String teamName, @RequestHeader("Secret-Key") String secretKey) {
+		return new ResponseEntity<>(teamService.createNewRecord(teamName), HttpStatus.OK);
 	}
 
 }

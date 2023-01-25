@@ -1,5 +1,8 @@
 package com.isd.game.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.isd.game.commons.error.CustomServiceException;
@@ -7,6 +10,8 @@ import com.isd.game.dto.MatchDTO;
 import com.isd.game.mapper.MatchService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 
 /**
@@ -27,19 +32,20 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @RestController()// @Controller + @ResponseBody
 @RequestMapping("/game/match")
+@RequiredArgsConstructor
 public class MatchController {
-	@Autowired
-	private MatchService matchService;
+	private final MatchService matchService;
 
 	// return all the matches
 	@RequestMapping(path = "/", method = RequestMethod.GET)
-	public @ResponseBody Iterable<MatchDTO> all(@RequestHeader("Secret-Key") String secretKey) {
-		return matchService.getAllData();
+	public @ResponseBody
+	ResponseEntity<List<MatchDTO>> all(@RequestHeader("Secret-Key") String secretKey) {
+		return new ResponseEntity<>(matchService.getAllData(), HttpStatus.OK);
 	}
 
 	// return a match by id
 	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody MatchDTO id(@PathVariable("id") Integer id, @RequestHeader("Secret-Key") String secretKey) throws CustomServiceException {
-		return matchService.findMatch(id);
+	public @ResponseBody ResponseEntity<MatchDTO> id(@PathVariable("id") Integer id, @RequestHeader("Secret-Key") String secretKey) throws CustomServiceException {
+		return new ResponseEntity<>(matchService.findMatch(id), HttpStatus.OK);
 	}
 }

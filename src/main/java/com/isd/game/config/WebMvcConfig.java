@@ -1,4 +1,4 @@
-package com.isd.game.commons;
+package com.isd.game.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
