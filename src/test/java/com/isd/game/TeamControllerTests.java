@@ -56,7 +56,6 @@ public class TeamControllerTests {
 
     @Test
 	public void teamAllShouldReturnAListOfTeamsFromService() throws Exception {
-		// TODO: cambiare, non usare il service ma il repository
 
 		when(teamService.getAllData()).thenReturn(
             Arrays.asList(

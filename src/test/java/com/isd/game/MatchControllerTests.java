@@ -68,7 +68,7 @@ public class MatchControllerTests {
 
 	@Test
 	public void matchAllShouldReturnAListOfMatchFromService() throws Exception {
-		// TODO: cambiare, non usare il service ma il repository
+
 		// mock the service to return a list of DTOs
 		List <MatchDTO> dummyMatchDTOs = Arrays.asList(
 			new MatchDTO(1, 0, 1, "Inter", "Milan", 0, 2, 3.0, 1.1, 2.2, 32, new Date(), null, MatchStatus.PLAYING),
@@ -100,8 +100,7 @@ public class MatchControllerTests {
 	// /game/match/{id} should return a single team from the service by id
     @Test
     public void matchByIdShouldReturnASingleTeamFromService() throws Exception {
-		// TODO: cambiare, non usare il service ma il repository
-
+	
 		Integer matchId = 1;
         when(matchService.findMatch(matchId)).thenReturn(
             new MatchDTO(1, 0, 1, "Inter", "Milan", 0, 2, 3.0, 1.1, 2.2, 32, new Date(), null, MatchStatus.PLAYING)
@@ -123,19 +122,4 @@ public class MatchControllerTests {
 
         assertEquals(matchDTO, matchService.findMatch(matchId));
     }
-
-	// /game/match/{id} should return 404 when the team is not found
-	// FIXME: this test is not working, the controller should manage the exception and not throw it
-	// @Test
-	// public void matchByIdShouldReturn404WhenTheTeamIsNotFound() throws Exception {
-	// 	Integer matchId = 1;
-	// 	when(matchService.findMatch(matchId)).thenThrow(new CustomServiceException(new CustomHttpResponse(HttpStatus.NOT_FOUND, "Match with id " + matchId + " does not exist")));
-
-	// 	// mock performs a GET request to the /game/match/{id} endpoint
-	// 	// and check if the call throws an exception of type CustomServiceException
-    //     this.mockMvc.perform(get("/game/match/"+matchId.toString()).header("Secret-Key", SECRET_SERVICE_KEY)).andDo(print())
-	// 	.andExpect(result -> assertTrue(result.getResolvedException() instanceof CustomServiceException))
-	// 	.andExpect(status().isNotFound())
-	// 	.andReturn();
-	// }
 }
