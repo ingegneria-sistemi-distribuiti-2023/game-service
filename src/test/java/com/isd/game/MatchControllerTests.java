@@ -1,6 +1,5 @@
 package com.isd.game;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,6 +44,10 @@ public class MatchControllerTests {
 	@Autowired
 	private MockMvc mockMvc;
 
+	/**
+	 * Test the /game/match endpoint without the secret key
+	 * @throws Exception
+	 */
 	@Test
     public void matchAllShouldReturnUnautorizedErrorWhenCalledWithoutSecretKey() throws Exception {
 		
@@ -55,7 +58,10 @@ public class MatchControllerTests {
         .andReturn();
 	}
 
-	//
+	/**
+	 * Test the /game/match endpoint with the wrong secret key
+	 * @throws Exception
+	 */
 	@Test
 	public void matchAllShouldReturnUnautorizedErrorWhenCalledWithWrongSecretKey() throws Exception {
 		
@@ -66,6 +72,10 @@ public class MatchControllerTests {
 		.andReturn();
 	}
 
+	/**
+	 * Test the /game/match endpoint with the correct secret key
+	 * @throws Exception
+	 */
 	@Test
 	public void matchAllShouldReturnAListOfMatchFromService() throws Exception {
 
@@ -95,9 +105,11 @@ public class MatchControllerTests {
 			assertEquals(matchDtos[i], matchService.getAllData().get(i));
 		}
 	}
-	//
 
-	// /game/match/{id} should return a single team from the service by id
+	/**
+	 * Test the /game/match/{id} endpoint, it should return a single team from the service by id
+	 * @throws Exception
+	 */
     @Test
     public void matchByIdShouldReturnASingleTeamFromService() throws Exception {
 	

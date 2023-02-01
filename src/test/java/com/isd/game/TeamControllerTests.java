@@ -38,15 +38,23 @@ public class TeamControllerTests {
     @Value("${app.service.secret}")
     private String SECRET_SERVICE_KEY;
 
+    /**
+     * Test if the /game/ endpoint returns 401 (UNAUTHORIZED) when called without the secret key
+     * @throws Exception
+     */
     @Test
     public void teamAllShouldReturnUnautorizedErrorWhenCalledWithoutSecretKey() throws Exception {	
-        // mock performs a GET request to the /team/all endpoint without the secret key
+        // mock performs a GET request to the /game/ endpoint without the secret key
 		// and check if the response status is 401 (UNAUTHORIZED)
 		this.mockMvc.perform(get("/game/")).andDo(print())
         .andExpect(status().isUnauthorized())
         .andReturn();
 	}
 
+    /**
+     * Test if the /game/ endpoint returns 401 (UNAUTHORIZED) when called with the wrong secret key
+     * @throws Exception
+     */
     @Test
     public void teamAllShouldReturnUnautorizedErrorWhenCalledWithWrongSecretKey() throws Exception {
         this.mockMvc.perform(get("/game/").header("Secret-Key", "wrong-secret-key")).andDo(print())
@@ -54,6 +62,11 @@ public class TeamControllerTests {
         .andReturn();
     }
 
+    /**
+     * Test if the /game/ endpoint returns 200 (OK) when called with the correct secret key
+     * It should also return a list of teams
+     * @throws Exception
+     */
     @Test
 	public void teamAllShouldReturnAListOfTeamsFromService() throws Exception {
 
